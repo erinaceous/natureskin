@@ -1,0 +1,76 @@
+naturesk.in
+-----------
+* An API mashup, taking all the GIS Digital Boundary Datasets made
+  available by Natural England, converting them into a "web-friendly"
+  format which anyone can query quickly, and turning them all into
+  vector layers on a Google Maps canvas.
+* A set of mobile apps (using PhoneGap) that make it easy to quickly
+  check these layers on a smartphone device, and use geolocation to
+  figure out what areas of interest are near your location
+  (perhaps even set up notifications for when you arrive inside the
+  boundaries of selected area(s), e.g.
+  "You are now in an AONB! {Name}").
+* Kept opensource. Once submitted, make the github repo public. Document
+  the API, allow other people to make use of it.
+* If actually get money from this, start paying for AppEngine :)
+* Make the mobile apps like a quid each or something but still
+  free-to-compile and free-to-use online
+  (consider rewriting native versions w/out phonegap)
+
+BACKEND
+-------
+* Use google app engine - code backend in python
+* Use python ESRI library to grab polygons + their metadata
+    * normalize
+    * assign Cell-ID(s) for areas (?)
+      (basically hash their coordinates )
+    * put in google noSQL database
+    * the different layers also have metadata - source, who to credit,
+      website, contact details, short description of layer...
+    * geospatial query code
+* Enable user accounts to store preferences (and custom layers)
+
+FRONTEND (MOBILE APPS)
+----------------------
+* Use PhoneGap
+* Use LocalStorage for caching layers + user preferences
+* Use Geolocation
+* Use Google Maps API v3
+* Use jQuery Mobile?
+* Use Notifications systems for geofence alerts
+* Gracefully hide UI stuff when features not available (ie. GPS)
+* First start: Show login/register/skip dialog, ask if should enable
+  location awareness (GPS), download list of layers and ask if user
+  would like to enable some of them
+* Only load polygons that are "near" to user/viewport (like, 20 miles?)
+* Make it clear to user in UI that they can refresh their cached layers
+  whenever they have data
+* Provide option to download 
+
+DEV. PROCESS
+------------
+* Keep everything on GitHub (private project for now)
+* Use PhoneGap Build to compile the mobile apps
+* Run server stuff on Google AppEngine (get dev. key for it!)
+* Register naturesk.in, use for desktop-based web client, and redirect
+  api.naturesk.in to the google appengine project.
+  mobile.naturesk.in is a fork of the mobile client code with the
+  PhoneGap stuff stripped out (if it has to be?)
+
+THEME
+-----
+* Lots of greens, nice reddish-browns, light greys, and maybe some blue
+* Fairly 'flat' interface but not so stupidly metro that buttons look
+  like labels - give buttons affordance.
+* Typography <3 find some nice fonts to use. I guess Droid Sans would be
+  a good place to start.
+* Design primarily for touchscreens - minimal interface, stuff only
+  appears when it's needed, elements are big w/ plenty of padding,
+  foreground + background must always be highly contrasting
+* Map layers: Simple algorithm to pick colours that are "far apart" no
+  matter how many layers are active. Layer backgrounds could also be
+  patterns of the type of layer? (e.g. "Ancient Woodlands" -
+  tree pattern)
+* Banner: handwritten "natureskin" where the "i" is a tree:
+  Logo: Forementioned tree. Made up of theme's primary colours, in
+  slightly diagonal layers.
