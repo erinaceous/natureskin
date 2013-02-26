@@ -404,6 +404,8 @@ class Reader:
                     value = 0
                 elif deci:
                     value = float(value)
+                elif value.endswith('.'):
+                    value = int(value[:-1])
                 else:
                     value = int(value)
             elif typ == b('D'):
