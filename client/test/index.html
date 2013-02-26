@@ -1,22 +1,41 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-      <style type="text/css">
-         html { height: 100%; }
-         body { height: 100%; margin: 0; padding: 0; }
-         #map_canvas { height: 100%; }
+      <title>natureskin</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+      <link rel="stylesheet" type="text/css" href="lib/jquery.mobile-1.3.0/naturey.css">
+      <link rel="stylesheet" type="text/css" href="lib/jquery.mobile-1.3.0/jquery.mobile.structure-1.3.0.css">
+      <style>
+         .map-page{
+            width: 100%;
+            height: 100%;
+         }
+
+         #map_content.ui-content{
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+         }
+
+         #map_canvas{
+            width: 100%;
+            height: 100%;
+            padding: 0px;
+            text-shadow: none;
+         }
       </style>
-      <script type="text/javascript"
-         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s&sensor=true">
+      <script type="text/javascript" src="phonegap.js"></script>
+      <script type="text/javascript" src="cordova.js"></script>
+      <script type="text/javascript" src="lib/jquery-1.9.1.js"></script>
+      <script type="text/javascript" src="lib/jquery.mobile-1.3.0/jquery.mobile-1.3.0.js"></script>
+      <script type="text/javascript" src="lib/jquery.ui.map.full.min.js"></script>
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s">
       </script>
       <script type="text/javascript"
-         src="magaonb.json">
+         src="data/magaonb.json">
       </script>
       <script type="text/javascript">
-         var map = null;
-
-         function addPolygon(polygon) {
+         function addPolygon(polygon, map) {
             var coords = new Array();
             for(var i=1; i<polygon.points.length; i+=2) {
                coords.push(new google.maps.LatLng(
@@ -31,29 +50,37 @@
                fillColor: "#66DD00",
                fillOpacity: 0.5*/
             });
-            console.log(coords);
             poly.setMap(map);
          }
 
          function init() {
-            var mapOptions = {
-               center: new google.maps.LatLng(50.576332919943006, -1.5872561139346522),
-               zoom: 8,
-               mapTypeId: google.maps.MapTypeId.SATELLITE
-            }
-            map = new google.maps.Map(
-               document.getElementById("map_canvas"), mapOptions
-            );
-            var polygons = get_polygons();
-            setTimeout(function() {
-               for(var i=0; i<polygons.length; i++) {
-                  addPolygon(polygons[i]);
-               }
-            }, 1000);
+            $('#map_canvas').gmap({
+               'center': new google.maps.LatLng(50.576332919943006, -1.5872561139346522),
+               'zoom': 8,
+               'mapTypeId': google.maps.MapTypeId.SATELLITE,
+               'disableDefaultUI': true
+            }).bind('init', init_polygons);
          }
+
+         function init_polygons(ev, map) {
+            var polygons = get_polygons();
+            for(var i=0; i<polygons.length; i++) {
+               addPolygon(polygons[i], map);
+            }
+         }
+
+         $(document).ready(init);
       </script>
    </head>
-   <body onload="init()">
-      <div id="map_canvas" style="width: 100%; height: 100%"></div>
+   <body>
+      <div data-role="page" data-theme="b" id="map" class="map-page">
+         <div data-role="header" data-position="inline">
+            <h3>natureskin</h3>
+            <a href="/menu" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+         </div>
+         <div data-role="content" id="map_content">
+            <div id="map_canvas"></div>
+         </div>
+      </div>
    </body>
 </html>
