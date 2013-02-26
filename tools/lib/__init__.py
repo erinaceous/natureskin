@@ -1,4 +1,5 @@
 __all__ = [
     'shapefile',
-    'orderedset'
+    'orderedset',
+    'simplify'
 ]

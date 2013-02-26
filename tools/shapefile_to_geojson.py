@@ -13,7 +13,7 @@ import json
 import os
 import pyproj
 
-from lib import shapefile, orderedset
+from lib import shapefile, orderedset, simplify
 
 
 from_proj = None
@@ -67,7 +67,13 @@ def reduce_wgs_rdp(coordinates, resolution):
                 [lon, lat, lon, lat, lon, lat, ...]
     """
     #  TODO: Implement this function!
-    pass
+    coordinates = [{"x": point[1], "y": point[0]}
+                   for point in coordinates]
+    coordinates = simplify.simplify(coordinates, resolution)
+    output = list()
+    for point in coordinates:
+        output.extend([point['y'], point['x']])
+    return output
 
 
 def reduce_dummy(coordinates, resolution):
@@ -164,7 +170,7 @@ def main():
                         help="From projection (EPSG code)")
     parser.add_argument("--to-proj", "-t", default='epsg:4326',
                         help="To projection (EPSG code)")
-    parser.add_argument("--resolution", "-r", type=int, default=-1,
+    parser.add_argument("--resolution", "-r", type=float, default=-1,
                         help="Resolution of coordinates - what this actually" +
                         " means varies between point reduction methods - for" +
                         " the 'round' method, lower values == lower " +
