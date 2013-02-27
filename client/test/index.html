@@ -78,11 +78,11 @@
       <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s">
       </script>
       <script type="text/javascript"
-         src="data/magaonb.json">
+         src="data/nnr.json">
       </script>
       <script type="text/javascript">
          var infoWindow = new google.maps.InfoWindow();
-         var activeColors = {}
+         var activeColor = 0;
 
          /*function get_polygons() {
             return Array();
@@ -92,19 +92,8 @@
             var length = parseInt(
                $('.map-color-length').css('content').replace(/'/g,'')
             );
-            for(var i=1; i<=length; i++) {
-               if(activeColors[i] != 1) {
-                  activeColors[i] = 1;
-                  return $('.map-color-'+i).css('color');
-               }
-            }
-            for(var i=1; i<=length; i++) {
-               if(activeColors[i] == 1) {
-                  activeColors[i] = 0;
-                  return $('.map-color-'+i).css('color');
-               }
-            }
-            return $('.map-color-1').css('color');
+            activeColor += 1;
+            return $('.map-color-'+(activeColor % length)).css('color');
          }
 
          function initMapColors() {
@@ -113,7 +102,6 @@
             );
             for(var i=1; i<=length; i++) {
                $('#map-colors').append("<span class='map-color-"+i+"'></span>");
-               activeColors[i] = 0;
             }
          }
 
@@ -200,6 +188,11 @@
             infoWindow.setContent(polygon.meta.name);
             infoWindow.open(map, marker);
             console.log(polygon.meta);
+            output="";
+            for(var item in polygon.meta) {
+               output += item+": "+polygon.meta[item]+"\n";
+            }
+            alert(output);
          }
 
          function init() {

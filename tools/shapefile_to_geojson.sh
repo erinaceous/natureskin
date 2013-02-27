@@ -1,2 +1,3 @@
 #!/bin/bash
-python2.7 ~/projects/natureskin/tools/shapefile_to_geojson.py --reduction-method smoothverts -r 0.001 $1
+
+python2.7 `dirname $0`/shapefile_to_geojson.py --reduction-method smoothverts --min-resolution=0.001 -r 0.0001 $1
