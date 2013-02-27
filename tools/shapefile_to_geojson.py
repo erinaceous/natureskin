@@ -4,6 +4,7 @@
 """Converts an ESRI shapefile (.shp) to GeoJSON (.json) format using the
    `pyshp` library.
    Uses `pyproj` to convert between coordinate systems.
+   Uses `simplify.py` to simplify polygons to reduce number of points.
 
    Author: Owain Jones [github.com/doomcat]
 """
@@ -66,7 +67,6 @@ def reduce_wgs_rdp(coordinates, resolution):
        Returns: A flattened list of coordinates, of the form
                 [lon, lat, lon, lat, lon, lat, ...]
     """
-    #  TODO: Implement this function!
     coordinates = [{"x": point[1], "y": point[0]}
                    for point in coordinates]
     coordinates = simplify.simplify(coordinates, resolution)
@@ -85,6 +85,8 @@ def reduce_dummy(coordinates, resolution):
     return new_coordinates
 
 
+# Give the algorithms short names so we can choose which one to use via
+# the commandline
 algorithms = {
     "round": reduce_wgs,
     "smoothverts": reduce_wgs_rdp,
@@ -104,7 +106,8 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
        to_proj:     The new coordinate system to reproject data to
        threshold:   The number of points all polygons should try to
                     contain (this is a maximum *and* a minimum)
-       min_res:     Minimum resolution of coordinates
+       min_res:     Minimum resolution of coordinates.
+                    Also used to generate the 'lo_res' points list.
        max_res:     Maximum resolution of coordinates
        resolution:  If anything other than -1, overrides min_res and
                     max_res and does a "dumb" reducing of data points
@@ -119,45 +122,85 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
                     list of tuples of the orm [(lon, lat), ...], and
                     must return a flattened list of coordinates of the
                     form [lon, lat, lon, lat, ...]
+
+       Returns:     Nothing - creates a new file for the output. Default
+                    is <input filename base>.json
     """
     sf = shapefile.Reader(input)
+
     if output_path is not None:
         output_file = open(output_path, 'w+')
     else:
         output_file = open(os.path.splitext(input)[0] + '.json', 'w+')
+
     output_file.write(prefix)
     output_file.write('[\n')
-    for index, polygon in enumerate(sf.shapes_iter()):
-        points = [reproject(point, from_proj, to_proj)
-                  for point in polygon.points]
+
+    for index, shape in enumerate(sf.shapes_iter()):
+        # Parse the shapefile recordset for this shape's associated
+        # record
         # Fields are out of order! FIX
         meta = {sf.fields[i][0].lower(): sf.records()[index][i - 1]
                 for i in xrange(0, len(sf.fields) - 1)}
-        del meta['deletionflag']
-        #print meta,
-        #meta = {}
+        try:
+            del meta['deletionflag']
+        except KeyError:
+            pass
 
-        # Find the resolution with the 'best' number of points.
-        # This means that small areas will stay detailed whilst large
-        # areas don't kill everyone's computers.
-        if resolution is not -1:
-            points = reduct_func(points, resolution)
-        else:
-            distance = len(points)
-            for i in xrange(min_res, max_res + 1):
-                cur_points = reduct_func(points, i)
-                cur_dist = abs(len(cur_points) - threshold)
-                if cur_dist < distance:
-                    distance = cur_dist
-                    best_points = cur_points
-                    best_res = i
-            points = best_points
-            print best_res,
-        bounds = reproject_bbox(polygon.bbox, from_proj, to_proj)
-        output = {"meta": meta, "bounds": bounds, "points": points}
+        # Some shapes are composed of multiple polygons (e.g. polygons
+        # with holes in them), so process each part individually.
+        parts = []
+        lo_res = []
+        sum_points = 0
+        sum_lo_res = 0
+
+        for i, part in enumerate(shape.parts):
+
+            if i == len(shape.parts) - 1:
+                end = len(shape.points) - 1
+            else:
+                end = shape.parts[i + 1]
+            polygon = shape.points[part:end]
+
+            # Reproject all the polygon points from BGS to WGS
+            points = [reproject(point, from_proj, to_proj)
+                      for point in polygon]
+
+            # Generate low-res version of polygon
+            points_lo = reduct_func(points, min_res)
+
+            if resolution is not -1:
+                points = reduct_func(points, resolution)
+            else:
+                # Find the polygon with the 'best' number of points.
+                # This means that small areas will stay detailed whilst
+                # large areas don't kill everyone's computers.
+                distance = len(points)
+
+                for i in xrange(min_res, max_res + 1):
+                    cur_points = reduct_func(points, i)
+                    cur_dist = abs(len(cur_points) - threshold)
+
+                    if cur_dist < distance:
+                        distance = cur_dist
+                        best_points = cur_points
+                        best_res = i
+
+                points = best_points
+                print best_res,
+
+            parts.append(points)
+            lo_res.append(points_lo)
+            sum_points += len(points)
+            sum_lo_res += len(points_lo)
+
+        bounds = reproject_bbox(shape.bbox, from_proj, to_proj)
+        output = {"meta": meta, "bounds": bounds,
+                  "lo_res": lo_res, "points": parts}
         output_file.write(json.dumps(output))
         output_file.write(",\n")
-        print index, len(polygon.points), len(points)
+        print index, len(shape.points)*2, sum_points, sum_lo_res
+
     output_file.write("]")
     output_file.write(suffix)
     output_file.close()
@@ -176,9 +219,9 @@ def main():
                         " the 'round' method, lower values == lower " +
                         "resolution, but for the 'smoothverts' method, " +
                         "lower values == higher resolution.")
-    parser.add_argument("--min-resolution", type=int, default=1,
+    parser.add_argument("--min-resolution", type=float, default=1,
                         help="Minimum coordinate resolution")
-    parser.add_argument("--max-resolution", type=int, default=5,
+    parser.add_argument("--max-resolution", type=float, default=5,
                         help="Maximum coordinate resolution")
     parser.add_argument("--points-threshold", "-p", type=int, default=300,
                         help="(Soft) maximum number of points per polygon")
