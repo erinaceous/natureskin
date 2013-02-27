@@ -1,0 +1,59 @@
+html, body{
+   font-family: Helvetica, Arial, sans-serif;
+   font-size: 18pt !important;
+   margin: 0px;
+   padding: 0px;
+   width: 100%;
+   height: 100%;
+}
+
+.ui-header .ui-btn, .ui-header .ui-icon, .ui-header .ui-btn-inner {
+   width: 32px;
+   height: 32px;
+}
+
+.ui-header .ui-btn-inner .ui-icon {
+   margin: 7px 0px 0px 7px;
+   border-radius: 0;
+}
+
+.ui-header {
+   height: 48px;
+}
+
+#map_content.ui-content{
+   padding: 0px;
+   width: 100%;
+   height: 100%;
+}
+
+#map_canvas{
+   padding: 0px;
+   margin: 0px;
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   bottom: 0px;
+   right: 0px;
+   text-shadow: none;
+   overflow: hidden;
+}
+
+.overlay-page {
+   background: transparent;
+   pointer-events: none;
+}
+
+.overlay-page > * {
+   pointer-events: all;
+}
+
+#map-toolbar {
+   background: none;
+   background-color: rgba(91,139,133,0.8);
+   background: -webkit-gradient(linear, left top, left bottom, from(rgba(91,139,133,0.8)), to(rgba(74,114,108,0.8));
+}
+
+#map-colors {
+   display: none;
+}
