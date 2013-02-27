@@ -7,7 +7,6 @@
       <link rel="stylesheet" type="text/css" href="lib/jquery.mobile-1.3.0/jquery.mobile.structure-1.3.0.css">
       <style>
          html, body{
-            overflow: hidden;
             font-family: Helvetica, Arial, sans-serif;
             font-size: 18pt !important;
          }
@@ -73,15 +72,15 @@
       <script type="text/javascript" src="lib/simplify.js"></script>
       <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s">
       </script>
-      <!-- <script type="text/javascript"
+      <script type="text/javascript"
          src="data/magaonb.json">
-      </script> -->
+      </script>
       <script type="text/javascript">
          var infoWindow = new google.maps.InfoWindow();
 
-         function get_polygons() {
+         /*function get_polygons() {
             return Array();
-         }
+         }*/
 
          function addPolygonReduced(polygon, map) {
             var paths = new Array();
@@ -168,7 +167,7 @@
          function init_polygons(ev, map) {
             var polygons = get_polygons();
             for(var i=0; i<polygons.length; i++) {
-               addArea(polygons[i], map);
+               addPolygonReduced(polygons[i], map);
             }
          }
 
