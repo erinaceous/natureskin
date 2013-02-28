@@ -13,12 +13,17 @@ import argparse
 import json
 import os
 import pyproj
+try:
+    import cgpolyencode as gpolyencode
+except ImportError:
+    import gpolyencode
 
 from lib import shapefile, orderedset, simplify
 
 
 from_proj = None
 to_proj = None
+encoder = gpolyencode.GPolyEncoder()
 
 
 def reproject(coordinates, from_proj, to_proj):
@@ -96,7 +101,8 @@ algorithms = {
 
 def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             resolution=-1, threshold=300, output_path=None,
-            reduct_func=reduce_wgs, prefix="", suffix=""):
+            reduct_func=reduce_wgs, prefix="", suffix="",
+            polyencode=True):
     """Takes a shapefile dataset and iterates over it, converting
        coordinates to the new projection on-the-fly.
 
@@ -122,6 +128,10 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
                     list of tuples of the orm [(lon, lat), ...], and
                     must return a flattened list of coordinates of the
                     form [lon, lat, lon, lat, ...]
+       polyencode:  If True, runs the google polygon encoding algorithm
+                    on all the polygons after smoothing them. Converts
+                    a list of lat/lon pairs into a smaller
+                    base64-encoded string.
 
        Returns:     Nothing - creates a new file for the output. Default
                     is <input filename base>.json
@@ -167,7 +177,8 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
                       for point in polygon]
 
             # Generate low-res version of polygon
-            points_lo = reduct_func(points, min_res)
+            if not polyencode:
+                points_lo = reduct_func(points, min_res)
 
             if resolution is not -1:
                 points = reduct_func(points, resolution)
@@ -189,17 +200,29 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
                 points = best_points
                 print best_res,
 
-            parts.append(points)
-            lo_res.append(points_lo)
             sum_points += len(points)
-            sum_lo_res += len(points_lo)
+            if not polyencode:
+                sum_lo_res += len(points_lo)
+
+            if polyencode:
+                parts.append(encoder.encode([
+                    points[i:i+2] for i in xrange(0, len(points), 2)
+                ]))
+            else:
+                parts.append(points)
+
+            if not polyencode:
+                lo_res.append(points_lo)
 
         bounds = reproject_bbox(shape.bbox, from_proj, to_proj)
         output = {"meta": meta, "bounds": bounds,
                   "lo_res": lo_res, "points": parts}
         output_file.write(json.dumps(output))
         output_file.write(",\n")
-        print index, len(shape.points)*2, sum_points, sum_lo_res
+        print index, len(shape.points)*2, sum_points,
+        if not polyencode:
+            print sum_lo_res,
+        print
 
     output_file.write("]")
     output_file.write(suffix)

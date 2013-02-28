@@ -60,13 +60,27 @@ function addArea(polygon, map) {
    var radius = google.maps.geometry.spherical.computeDistanceBetween(
       NW, SE
    ) / 3;
+   var area = 0;
+   for(var x=0; x<polygon.points.length; x++) {
+      var coords = new Array();
+      for(var i=1; i<polygon.points[x].length; i+=2) {
+         coords.push(new google.maps.LatLng(
+            polygon.points[x][i], polygon.points[x][i-1]
+         ));
+      }
+      coords.push(coords[0]); // close the polygon
+      area += google.maps.geometry.spherical.computeArea(coords);
+   }
+   polygon.meta.area = area;
+   //var radius = area / 2;
    var marker = new google.maps.Circle({
       'center': bounds.getCenter(),
       'map': map,
       'title': polygon.meta.name,
       'radius': radius,
       'strokeWeight': 0,
-      'fillOpacity': 0.5
+      'fillOpacity': 0.5,
+      'fillColor': getMapColor()
    });
    google.maps.event.addListener(marker, 'click', function() {
       showInfo(map, polygon, marker);
@@ -102,6 +116,19 @@ function addPolygon(polygon, map) {
    });
 }
 
+function addRect(polygon, map) {
+   var bounds = new google.maps.LatLngBounds();
+   var area = 0;
+   for(var x=0; x<polygon.points.length; x++) {
+      var coords = new Array();
+      for(var i=1; i<polygon.points[x].length; i+=2) {
+         coords.push(new google.maps.LatLng(
+            polygon.points[x][i], polygon.points[x][i-1]
+         ));
+      }
+   }
+}
+
 function showInfo(map, polygon, marker) {
    infoWindow.setContent(polygon.meta.name);
    infoWindow.open(map, marker);
@@ -133,7 +160,7 @@ function init() {
 function init_polygons(map) {
    var polygons = get_polygons();
    for(var i=0; i<polygons.length; i++) {
-      addPolygon(polygons[i], map);
+      addArea(polygons[i], map);
    }
 }
 
