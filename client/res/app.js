@@ -175,7 +175,7 @@ function init() {
 function init_polygons(map) {
    var polygons = get_polygons();
    for(var i=0; i<polygons.length; i++) {
-      addPolygonReduced(polygons[i], map);
+      addPolygon(polygons[i], map);
    }
 }
 
