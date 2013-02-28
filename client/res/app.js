@@ -46,40 +46,47 @@ function parsePolygon(polygon) {
 }
 
 function addPolygonReduced(polygon, map) {
+   var data = parsePolygon(polygon);
    var paths = new Array();
-   var area = 0;
    for(var x=0; x<polygon.points.length; x++) {
       var points = new Array();
       var coords = new Array();
-      for(var i=1; i<polygon.points[x].length; i+=2) {
+      for(var i=0; i<data.paths[x].length; i++) {
          points.push({
-            "x": polygon.points[x][i-1], "y": polygon.points[x][i]
+            "x": data.paths[x][i].lng(),
+            "y": data.paths[x][i].lat()
          });
       }
       points.push({
-         "x": polygon.points[x][0], "y": polygon.points[x][1]
+         "x": data.paths[x][0].lng(),
+         "y": data.paths[x][0].lat()
       });
-      points = simplify(points, 0.05);
+      points = simplify(points, 0.001);
       coords = new Array(); 
       for(var i=0; i<points.length; i++) {
          coords.push(new google.maps.LatLng(
             points[i].y, points[i].x
          ));
       }
-      area += google.maps.geometry.spherical.computeArea(coords);
       paths.push(coords);
    }
-   polygon.meta.area = area;
+   polygon.meta.area = data.area;
+   var color = getMapColor();
    poly = new google.maps.Polygon({
-      'paths': paths
+      'paths': paths,
+      'fillColor': color,
+      'strokeColor': color,
+      'fillOpacity': 0.25
    });
    poly.setMap(map);
-   google.maps.event.addListener(marker, 'click', function() {
-      showInfo(map, polygon, marker);
+   google.maps.event.addListener(poly, 'click', function() {
+      showInfo(map, polygon, poly);
    });
 }
 
 function addArea(polygon, map) {
+   var data = parsePolygon(polygon);
+   polygon.meta.area = data.area;
    var bounds = new google.maps.LatLngBounds();
    var NW = new google.maps.LatLng(
       polygon.bounds[1], polygon.bounds[0]
@@ -92,19 +99,6 @@ function addArea(polygon, map) {
    var radius = google.maps.geometry.spherical.computeDistanceBetween(
       NW, SE
    ) / 3;
-   var area = 0;
-   for(var x=0; x<polygon.points.length; x++) {
-      var coords = new Array();
-      for(var i=1; i<polygon.points[x].length; i+=2) {
-         coords.push(new google.maps.LatLng(
-            polygon.points[x][i], polygon.points[x][i-1]
-         ));
-      }
-      coords.push(coords[0]); // close the polygon
-      area += google.maps.geometry.spherical.computeArea(coords);
-   }
-   polygon.meta.area = area;
-   //var radius = area / 2;
    var marker = new google.maps.Circle({
       'center': bounds.getCenter(),
       'map': map,
@@ -120,19 +114,6 @@ function addArea(polygon, map) {
 }
 
 function addPolygon(polygon, map) {
-   /*var paths = new Array();
-   var area = 0;
-   for(var x=0; x<polygon.points.length; x++) {
-      var coords = new Array();
-      for(var i=1; i<polygon.points[x].length; i+=2) {
-         coords.push(new google.maps.LatLng(
-            polygon.points[x][i], polygon.points[x][i-1]
-         ));
-      }
-	       coords.push(coords[0]); // close the polygon
-	       area += google.maps.geometry.spherical.computeArea(coords);
-      paths.push(coords);
-   }*/
    data = parsePolygon(polygon);
    polygon.meta.area = data.area;
    color = getMapColor();
@@ -194,7 +175,7 @@ function init() {
 function init_polygons(map) {
    var polygons = get_polygons();
    for(var i=0; i<polygons.length; i++) {
-      addPolygon(polygons[i], map);
+      addPolygonReduced(polygons[i], map);
    }
 }
 
