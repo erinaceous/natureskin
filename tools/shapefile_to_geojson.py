@@ -1,10 +1,16 @@
 #!/usr/bin/env python
 # vim: tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 # encoding: utf-8
-"""Converts an ESRI shapefile (.shp) to GeoJSON (.json) format using the
-   `pyshp` library.
+"""
+   Converts an ESRI shapefile (.shp) to JSON (.json) format using the
+   `pyshp` library. Tailored heavily towards Google Maps things, as it
+   reprojects coordinates to WGS84 and encodes them in google's polyline
+   format.
+
    Uses `pyproj` to convert between coordinate systems.
    Uses `simplify.py` to simplify polygons to reduce number of points.
+   Uses `gpolyencode` to encode the polygons into google's nice
+   efficient format :)
 
    Author: Owain Jones [github.com/doomcat]
 """
@@ -102,7 +108,7 @@ algorithms = {
 def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             resolution=-1, threshold=300, output_path=None,
             reduct_func=reduce_wgs, prefix="", suffix="",
-            polyencode=True):
+            polyencode=True, preview=False):
     """Takes a shapefile dataset and iterates over it, converting
        coordinates to the new projection on-the-fly.
 
@@ -132,14 +138,20 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
                     on all the polygons after smoothing them. Converts
                     a list of lat/lon pairs into a smaller
                     base64-encoded string.
+       preview:     If True, this function won't write to any files.
+                    Instead, it prints out the first object in its
+                    JSON form and then returns.
 
        Returns:     Nothing - creates a new file for the output. Default
                     is <input filename base>.json
     """
+
     sf = shapefile.Reader(input)
 
-    if output_path is not None:
+    if output_path is not None and preview is not True:
         output_file = open(output_path, 'w+')
+    elif preview is True:
+        output_file = open('/dev/null', 'w+')
     else:
         output_file = open(os.path.splitext(input)[0] + '.json', 'w+')
 
@@ -217,6 +229,9 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
         bounds = reproject_bbox(shape.bbox, from_proj, to_proj)
         output = {"meta": meta, "bounds": bounds,
                   "lo_res": lo_res, "points": parts}
+        if preview is True:
+            print json.dumps(output)
+            return
         output_file.write(json.dumps(output))
         output_file.write(",\n")
         print index, len(shape.points)*2, sum_points,
@@ -254,9 +269,13 @@ def main():
                         help="Method to reduce number of points in shape. " +
                              "Available: %s" % ', '.join(algorithms.keys()))
     parser.add_argument("--output-prefix",
-                        default="function get_polygons() { return ")
+                        default="var areas_data = ")
     parser.add_argument("--output-suffix",
-                        default="; }")
+                        default=";")
+    parser.add_argument("--no-polyencode", action="store_true", default=False,
+                        help="Don't encode into google's polyline encoding")
+    parser.add_argument("--preview", action="store_true", default=False,
+                        help="Don't write to file, just show first result")
     args = parser.parse_args()
 
     global from_proj, to_proj
@@ -269,7 +288,8 @@ def main():
                 resolution=args.resolution, threshold=args.points_threshold,
                 output_path=args.output,
                 reduct_func=algorithms[args.reduction_method],
-                prefix=args.output_prefix, suffix=args.output_suffix)
+                prefix=args.output_prefix, suffix=args.output_suffix,
+                polyencode=~args.no_polyencode, preview=args.preview)
 
 
 if __name__ == '__main__':

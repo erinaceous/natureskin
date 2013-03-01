@@ -1,33 +1,16 @@
+@import url(../lib/fonts.css);
+
 html, body{
-   font-family: Helvetica, Arial, sans-serif;
+   //font-family: Helvetica, Arial, sans-serif;
+   font-family: "Droid Sans", Helvetica, Arial, sans-serif;
    //font-size: 18pt !important;
    margin: 0px;
    padding: 0px;
    width: 100%;
    height: 100%;
    overflow: hidden;
-   background-color: black;
+   background-color: #f2e3b3;
 }
-
-/*.ui-header .ui-btn, .ui-header .ui-icon, .ui-header .ui-btn-inner {
-   width: 32px;
-   height: 32px;
-}
-
-.ui-header .ui-btn-inner .ui-icon {
-   margin: 7px 0px 0px 7px;
-   border-radius: 0;
-}
-
-.ui-header {
-   height: 48px;
-}*/
-
-/*#map_content.ui-content{
-   padding: 0px;
-   width: 100%;
-   height: 100%;
-}*/
 
 #map_canvas{
    padding: 0px;

@@ -3,31 +3,29 @@
    <head>
       <title>natureskin</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.5, maximum-scale=1.5, user-scalable=no" />
-      <link rel="stylesheet" type="text/css" href="lib/jquery.mobile-1.3.0/naturey.css" />
-      <link rel="stylesheet" type="text/css" href="lib/jquery.mobile-1.3.0/jquery.mobile.structure-1.3.0.css" />
-      <link rel="stylesheet" type="text/css" href="res/map-colors.css" />
-      <link rel="stylesheet" type="text/css" href="res/app.css" />
+      <link rel="stylesheet" type="text/css" href="app.css">
       <script type="text/javascript" src="phonegap.js"></script>
       <script type="text/javascript" src="cordova.js"></script>
       <script type="text/javascript" src="lib/jquery-1.9.1.js"></script>
       <script type="text/javascript" src="lib/jquery.mobile-1.3.0/jquery.mobile-1.3.0.js"></script>
-      <!-- <script type="text/javascript" src="lib/jquery.ui.map.full.min.js"></script> -->
+      <script type="text/javascript" src="lib/jquery.mobile.simpledialog2.js"></script>
       <script type="text/javascript" src="lib/simplify.js"></script>
       <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s"></script>
       <script type="text/javascript" src="res/app.js"></script>
-      <script type="text/javascript" src="data/nnr.json"></script>
+      <script type="text/javascript" src="data/magaonb.json"></script>
    </head>
    <body data-theme="b">
-      <div class="ui-body-b" id="map_canvas"></div>
+      <div data-position="fixed" data-fullscreen="true"
+           class="ui-body-b" id="map_canvas"></div>
       <div data-role="page" class="overlay-page" id="map">
-         <div data-role="header" data-position="inline" id="map-toolbar">
+         <div data-role="header" data-position="fixed"
+              class="overlay-page" id="map-toolbar">
             <a href="#settings" data-icon="grid" data-iconpos="notext"
-               data-direction="reverse"
                class="ui-btn-left jqm-grid">Settings</a>
          </div>
       </div>
       <div data-role="page" id="settings">
-         <div data-role="header" data-position="inline">
+         <div data-role="header" data-position="fixed">
             <a href="#map" data-icon="back" data-iconpos="notext"
                data-direction="reverse"
                class="ui-btn-left jcm-left">Back to Map</a>
@@ -35,9 +33,8 @@
          </div>
       </div>
       <div data-role="page" id="info">
-         <div data-role="header" data-position="inline">
+         <div data-role="header" data-position="fixed">
             <a href="#map" data-icon="back" data-iconpos="notext"
-               data-direction="reverse"
                class="ui-btn-left jcm-left">Back to Map</a>
             <h3 id="info-name">Area Information</h3>
          </div>

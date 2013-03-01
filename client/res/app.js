@@ -154,7 +154,13 @@ function showInfo(map, polygon, marker) {
    }
    $('#info-name').text(polygon.meta.nnr_name);
    $('#info-meta').html(output);
-   window.location.hash = 'info';
+   //window.location.hash = 'info';
+   $('<div/>').simpledialog2({
+      'mode': 'blank',
+      'headerText': polygon.meta.name,
+      'headerClose': true,
+      'blankContent': output
+   });
 }
 
 function init() {
