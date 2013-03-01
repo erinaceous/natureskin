@@ -160,7 +160,8 @@ function showInfo(map, polygon, marker) {
       'headerClose': true,
       'blankContent': output,
       'showModal': false,
-      'blankContentAdopt': true
+      'blankContentAdopt': true,
+      'fullScreen': true
    });
 }
 
