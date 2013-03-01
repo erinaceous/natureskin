@@ -1,4 +1,6 @@
-var infoWindow = new google.maps.InfoWindow();
+var EARTH_RADIUS_MILES = 3961.3;
+var METERS_TO_MILES = 0.000621371192;
+
 var activeColor = 0;
 var map = null;
 
@@ -40,7 +42,8 @@ function parsePolygon(polygon) {
          );
       }
       paths.push(coords);
-      area += google.maps.geometry.spherical.computeArea(coords);
+      area += google.maps.geometry.spherical.computeArea(
+                coords);
    }
    return {"paths": paths, "area": area};
 }
@@ -145,21 +148,19 @@ function addRect(polygon, map) {
 }
 
 function showInfo(map, polygon, marker) {
-   infoWindow.setContent(polygon.meta.name);
-   infoWindow.open(map, marker);
-   console.log(polygon.meta);
-   output="";
+   output="<div data-role='content' style='padding: 0px 1em'>\n";
    for(var item in polygon.meta) {
       output += "<p><b>"+item+"</b>: "+polygon.meta[item]+"</p>\n";
    }
-   $('#info-name').text(polygon.meta.nnr_name);
-   $('#info-meta').html(output);
-   //window.location.hash = 'info';
+   output += "</div>";
    $('<div/>').simpledialog2({
       'mode': 'blank',
-      'headerText': polygon.meta.name,
+      'width': '400px',
+      'headerText': polygon.meta.nnr_name,
       'headerClose': true,
-      'blankContent': output
+      'blankContent': output,
+      'showModal': false,
+      'blankContentAdopt': true
    });
 }
 

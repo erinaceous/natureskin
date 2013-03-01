@@ -1,9 +1,8 @@
 @import url(../lib/fonts.css);
 
 html, body{
-   //font-family: Helvetica, Arial, sans-serif;
    font-family: "Droid Sans", Helvetica, Arial, sans-serif;
-   //font-size: 18pt !important;
+   word-wrap: break-word !important;
    margin: 0px;
    padding: 0px;
    width: 100%;
@@ -46,3 +45,4 @@ html, body{
 .ui-page {
    overflow: scroll-y;
 }
+
