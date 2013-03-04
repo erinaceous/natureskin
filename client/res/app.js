@@ -155,7 +155,7 @@ function showInfo(map, polygon, marker) {
    output += "</div>";
    $('<div/>').simpledialog2({
       'mode': 'blank',
-      'width': '400px',
+      'width': '360px',
       'headerText': polygon.meta.nnr_name,
       'headerClose': true,
       'blankContent': output,
