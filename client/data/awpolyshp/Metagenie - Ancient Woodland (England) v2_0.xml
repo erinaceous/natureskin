@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gemini:GEMINI_Metadata xmlns:gemini="http://www.gigateway.org.uk/gemini" xmlns:egemini="http://www.gigateway.org.uk/egemini" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:gts="http://www.isotc211.org/schemas/2005/gts" xmlns:gco="http://www.isotc211.org/schemas/2005/gco" xmlns:gmd="http://www.isotc211.org/schemas/2005/gmd" xmlns:java="http//xml.apache.org/xslt/java" xmlns:sflatlongconvert="uk.co.snowflakesoft.metaeditor.transform.ConvertToLatLongValue" xmlns="http://www.gigateway.org.uk/gemini" xsi:schemaLocation="http://www.gigateway.org.uk/gemini  http://www.gigateway.org.uk/xsd/gemini/gemini/geminiSchema.xsd">
+<gmd:contact xlink:href="#Distributor" xlink:type="simple"/>
+<gmd:dateStamp>
+<gco:Date>2012-10-04</gco:Date>
+</gmd:dateStamp>
+<gmd:metadataStandardName>
+<gmd:GEMINI_StandardNameCharacterString>GEMINI</gmd:GEMINI_StandardNameCharacterString>
+</gmd:metadataStandardName>
+<gmd:metadataStandardVersion>
+<gmd:GEMINI_StandardVersionCharacterString>1.0</gmd:GEMINI_StandardVersionCharacterString>
+</gmd:metadataStandardVersion>
+<gmd:referenceSystemInfo>
+<gmd:GEMINI_ReferenceSystem>
+<gmd:referenceSystemIdentifier>
+<gmd:GEMINI_RS_Identifer>
+<gmd:code>
+<gco:GEMINI_CharacterString>nationalGridGB</gco:GEMINI_CharacterString>
+</gmd:code>
+</gmd:GEMINI_RS_Identifer>
+</gmd:referenceSystemIdentifier>
+</gmd:GEMINI_ReferenceSystem>
+</gmd:referenceSystemInfo>
+<gmd:identificationInfo>
+<gmd:GEMINI_MD_DataIdentification>
+<gmd:citation>
+<gmd:GEMINI_Citation>
+<gmd:title>
+<gco:GEMINI_CharacterString>Ancient Woodland (England)</gco:GEMINI_CharacterString>
+</gmd:title>
+<gmd:alternateTitle>
+<gco:GEMINI_CharacterString>Boundaries of Ancient Woodland polygons. AWI.</gco:GEMINI_CharacterString>
+</gmd:alternateTitle>
+<gmd:date>
+<gmd:GEMINI_CI_Date>
+<gmd:date>
+<gco:Date>2012-10-04</gco:Date>
+</gmd:date>
+<gmd:dateType>
+<gmd:GEMINI_CI_DateTypeCode codeListValue="publication" codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#CI_DateTypeCode"/>
+</gmd:dateType>
+</gmd:GEMINI_CI_Date>
+</gmd:date>
+<gmd:presentationForm>
+<gmd:GEMINI_PresentationFormCode codeListValue="mapDigital" codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#CI_PresentationFormCode"/>
+</gmd:presentationForm>
+</gmd:GEMINI_Citation>
+</gmd:citation>
+<gmd:abstract>
+<gco:GEMINI_CharacterString>This is a spatial dataset that describes the geographic extent and location of ancient woodland habitat in England (excluding the Isles of Scilly). 
+
+Ancient woodland is land that has had a continuous woodland cover since at least 1600 AD and may be ancient semi-natural woodland (ASNW), which retains a native tree and shrub cover that has not been planted, although it may have been managed by coppicing or felling and allowed to regenerate naturally, or plantation on ancient woodland sites (PAWS) where the original tree cover has been felled and replaced by planting, often with conifers, and usually over the last century.
+
+In total 44903 polygons were captured, covering approximately 358,885.68Ha. 
+</gco:GEMINI_CharacterString>
+</gmd:abstract>
+<gmd:pointOfContact>
+<gmd:OriginatorResponsibleParty>
+<gmd:organisationName>
+<gco:GEMINI_CharacterString>Natural England</gco:GEMINI_CharacterString>
+</gmd:organisationName>
+<gmd:role>
+<gmd:GEMINI_OriginatorRoleCode codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#CI_RoleCode" codeListValue="originator"/>
+</gmd:role>
+</gmd:OriginatorResponsibleParty>
+</gmd:pointOfContact>
+<gmd:descriptiveKeywords>
+<gmd:GEMINI_MD_Keywords>
+<gmd:keyword>
+<gco:GEMINI_CharacterString>Agriculture</gco:GEMINI_CharacterString>
+</gmd:keyword>
+</gmd:GEMINI_MD_Keywords>
+</gmd:descriptiveKeywords>
+<gmd:descriptiveKeywords>
+<gmd:GEMINI_MD_Keywords>
+<gmd:keyword>
+<gco:GEMINI_CharacterString>Environment</gco:GEMINI_CharacterString>
+</gmd:keyword>
+</gmd:GEMINI_MD_Keywords>
+</gmd:descriptiveKeywords>
+<gmd:descriptiveKeywords>
+<gmd:GEMINI_MD_Keywords>
+<gmd:keyword>
+<gco:GEMINI_CharacterString>Natural Resources</gco:GEMINI_CharacterString>
+</gmd:keyword>
+</gmd:GEMINI_MD_Keywords>
+</gmd:descriptiveKeywords>
+<gmd:spatialRepresentationType>
+<gmd:GEMINI_SpatialRepresentationTypeCode codeListValue="vector" codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#MD_SpatialRepresentationCodeType"/>
+</gmd:spatialRepresentationType>
+<gmd:language>
+<gco:GEMINI_Language_CharacterString>ENG</gco:GEMINI_Language_CharacterString>
+</gmd:language>
+<gmd:topicCategory>
+<gmd:GEMINI_TopicCategoryCode>biota</gmd:GEMINI_TopicCategoryCode>
+</gmd:topicCategory>
+<gmd:topicCategory>
+<gmd:GEMINI_TopicCategoryCode>planningCadastre</gmd:GEMINI_TopicCategoryCode>
+</gmd:topicCategory>
+<gmd:topicCategory>
+<gmd:GEMINI_TopicCategoryCode>environment</gmd:GEMINI_TopicCategoryCode>
+</gmd:topicCategory>
+<gmd:extent>
+<gmd:GEMINI_Extent>
+<gmd:geographicElement>
+<gmd:GEMINI_GeographicDescription>
+<gmd:geographicIdentifier>
+<gmd:GEMINI_MD_Identifier>
+<gmd:code>
+<gco:GEMINI_CharacterString>England</gco:GEMINI_CharacterString>
+</gmd:code>
+</gmd:GEMINI_MD_Identifier>
+</gmd:geographicIdentifier>
+</gmd:GEMINI_GeographicDescription>
+</gmd:geographicElement>
+<gmd:geographicElement>
+<gmd:GEMINI_GeographicBoundingBox>
+<gmd:westBoundLongitude>
+<gco:Decimal>-6.41736</gco:Decimal>
+</gmd:westBoundLongitude>
+<gmd:eastBoundLongitude>
+<gco:Decimal>2.00322</gco:Decimal>
+</gmd:eastBoundLongitude>
+<gmd:southBoundLatitude>
+<gco:Decimal>49.8625</gco:Decimal>
+</gmd:southBoundLatitude>
+<gmd:northBoundLatitude>
+<gco:Decimal>55.689</gco:Decimal>
+</gmd:northBoundLatitude>
+</gmd:GEMINI_GeographicBoundingBox>
+</gmd:geographicElement>
+<gmd:temporalElement>
+<gmd:GEMINI_TemporalExtent>
+<gmd:extent>
+<gts:GEMINI_TimePrimitive gml:id="GEMINI_TimePrimitive">
+<gml:begin>
+<gml:GEMINI_TimeInstant gml:id="datasetStartDate">
+<gml:timePosition/>
+</gml:GEMINI_TimeInstant>
+</gml:begin>
+<gml:end>
+<gml:GEMINI_TimeInstant gml:id="datasetEndDate">
+<gml:timePosition/>
+</gml:GEMINI_TimeInstant>
+</gml:end>
+</gts:GEMINI_TimePrimitive>
+</gmd:extent>
+</gmd:GEMINI_TemporalExtent>
+</gmd:temporalElement>
+</gmd:GEMINI_Extent>
+</gmd:extent>
+<gmd:supplementalInformation>
+<gco:GEMINI_CharacterString>http://www.gis.naturalengland.org.uk/pubs/gis/GIS_register.asp; http://www.gis.naturalengland.org.uk/pubs/gis/tech_ds.htm; http://www.ordnancesurvey.co.uk/oswebsite/products/osmastermap/; http://www.naturalengland.org.uk/copyright/; http://www.magic.gov.uk/</gco:GEMINI_CharacterString>
+</gmd:supplementalInformation>
+</gmd:GEMINI_MD_DataIdentification>
+</gmd:identificationInfo>
+<gmd:distributionInfo>
+<gmd:GEMINI_Distribution>
+<gmd:distributionFormat>
+<gmd:GEMINI_Format>
+<gmd:name>
+<gco:GEMINI_CharacterString>ESRI shp</gco:GEMINI_CharacterString>
+</gmd:name>
+<gmd:version>
+<gmd:GEMINI_Format_FixedVersion>unused</gmd:GEMINI_Format_FixedVersion>
+</gmd:version>
+</gmd:GEMINI_Format>
+</gmd:distributionFormat>
+<gmd:distributionFormat>
+<gmd:GEMINI_Format>
+<gmd:name>
+<gco:GEMINI_CharacterString>MapInfo tab</gco:GEMINI_CharacterString>
+</gmd:name>
+<gmd:version>
+<gmd:GEMINI_Format_FixedVersion>unused</gmd:GEMINI_Format_FixedVersion>
+</gmd:version>
+</gmd:GEMINI_Format>
+</gmd:distributionFormat>
+<gmd:distributor>
+<gmd:GEMINI_Distributor>
+<gmd:distributorContact>
+<gmd:DistributorResponsibleParty>
+<gmd:organisationName>
+<gco:GEMINI_CharacterString>Habitat Inventory Team</gco:GEMINI_CharacterString>
+</gmd:organisationName>
+<gmd:positionName>
+<gco:GEMINI_CharacterString>Habitat Inventory Team</gco:GEMINI_CharacterString>
+</gmd:positionName>
+<gmd:contactInfo>
+<gmd:GEMINI_Contact>
+<gmd:phone>
+<gmd:GEMINI_Telephone/>
+</gmd:phone>
+<gmd:address>
+<gmd:GEMINI_Address>
+<gmd:deliveryPoint>
+<gco:GEMINI_CharacterString>Natural England
+Parkside Court
+Hall Park Way
+Telford
+TF3 4LR</gco:GEMINI_CharacterString>
+</gmd:deliveryPoint>
+<gmd:electronicMailAddress>
+<gco:GEMINI_CharacterString>habitat.inventories@naturalengland.org.uk</gco:GEMINI_CharacterString>
+</gmd:electronicMailAddress>
+</gmd:GEMINI_Address>
+</gmd:address>
+<gmd:onlineResource>
+<gmd:GEMINI_OnlineResource>
+<gmd:linkage>
+<gmd:URL>www.naturalengland.org.uk</gmd:URL>
+</gmd:linkage>
+</gmd:GEMINI_OnlineResource>
+</gmd:onlineResource>
+</gmd:GEMINI_Contact>
+</gmd:contactInfo>
+<gmd:role>
+<gmd:GEMINI_DistributorRoleCode codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#CI_RoleCode" codeListValue="distributor"/>
+</gmd:role>
+</gmd:DistributorResponsibleParty>
+</gmd:distributorContact>
+</gmd:GEMINI_Distributor>
+</gmd:distributor>
+<gmd:transferOptions>
+<gmd:GEMINI_DigitalTransferOptions>
+<gmd:offLine>
+<gmd:GEMINI_Medium>
+<gmd:mediumFormat>
+<gmd:GEMINI_MD_MediumFormatCode codeListValue="onLine" codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#MD_MediumNameCode"/>
+</gmd:mediumFormat>
+</gmd:GEMINI_Medium>
+</gmd:offLine>
+</gmd:GEMINI_DigitalTransferOptions>
+</gmd:transferOptions>
+</gmd:GEMINI_Distribution>
+</gmd:distributionInfo>
+<gmd:metadataConstraints>
+<gmd:GEMINI_LegalConstraints>
+<gmd:accessConstraints>
+<gmd:GEMINI_RestrictionCode codeListValue="otherRestrictions" codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#MD_restrictionCode"/>
+</gmd:accessConstraints>
+<gmd:useConstraints>
+<gmd:GEMINI_RestrictionCode codeListValue="intellectualPropertyRights" codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#MD_restrictionCode"/>
+</gmd:useConstraints>
+</gmd:GEMINI_LegalConstraints>
+</gmd:metadataConstraints>
+<gmd:metadataMaintenance>
+<gmd:GEMINI_MaintenanceInformation>
+<gmd:maintenanceAndUpdateFrequency>
+<gmd:GEMINI_MaintenanceFrequencyCode codeList="http://www.gigateway.org.uk/schema/gemini/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="irregular"/>
+</gmd:maintenanceAndUpdateFrequency>
+</gmd:GEMINI_MaintenanceInformation>
+</gmd:metadataMaintenance>
+</gemini:GEMINI_Metadata>
