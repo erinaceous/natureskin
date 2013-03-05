@@ -182,8 +182,11 @@ function init() {
 
 function init_polygons(map) {
    var polygons = get_polygons();
-   for(var i=0; i<polygons.length; i++) {
+   /*for(var i=0; i<polygons.length; i++) {
       addPolygon(polygons[i], map);
+   }*/
+   for(var i=0; i<3; i++) {
+     addPolygon(polygons[i], map);
    }
 }
 
