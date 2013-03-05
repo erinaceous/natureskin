@@ -5,7 +5,7 @@ var activeColor = 0;
 var map = null;
 
 function get_polygons() {
-   return [];
+   return areas_data;
 }
 
 function getMapColor() {

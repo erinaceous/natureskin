@@ -18,7 +18,8 @@ scripts = [
     "res/normalize.js",
     "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s",
     "res/app.js",
-    "data/magaonb.json"
+    //"data/magaonb.json"
+    "data/Ancient_Woodland_Inventory_v2-0.json"
 ];
 
 for(script in scripts) {
