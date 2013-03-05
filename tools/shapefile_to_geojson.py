@@ -178,16 +178,15 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
         polys_tmp = []
         parts_tmp = getattr(shape, 'parts', [0])
 
-        print parts_tmp
-
+        # Get the points for the seperate parts, if they exist.
         for i, part in enumerate(parts_tmp):
             if i == len(parts_tmp) - 1:
                 end = len(parts_tmp) - 1
             else:
                 end = parts_tmp[i + 1]
-            parts_tmp.append(shape.points[part:end])
+            polys_tmp.append(shape.points[part:end])
 
-        for i, polygon in enumerate(parts_tmp):
+        for i, polygon in enumerate(polys_tmp):
             # Reproject all the polygon points from BGS to WGS
             points = [reproject(point, from_proj, to_proj)
                       for point in polygon]

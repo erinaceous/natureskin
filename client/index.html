@@ -12,9 +12,15 @@
       <div data-role="page" class="overlay-page" id="map">
          <div data-role="header" data-position="fixed"
               class="overlay-page" id="map-toolbar">
-            <a href="#settings" data-icon="grid" data-iconpos="notext"
-               class="ui-btn-left jqm-grid">Settings</a>
+            <a href="#menu" data-icon="grid" data-iconpos="notext"
+               data-transition="slide" data-position-to="window"
+               data-role="button"
+               class="ui-btn-right jqm-grid">Menu</a>
          </div>
+      </div>
+      <div data-role="popup" id="menu" data-tolerance="0,0">
+         <button data-icon="back">Back</button>
+         <button data-icon="search">Search</button>
       </div>
       <div data-role="page" id="settings">
          <div data-role="header" data-position="fixed">
