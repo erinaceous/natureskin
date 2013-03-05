@@ -175,15 +175,19 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
         lo_res = []
         sum_points = 0
         sum_lo_res = 0
+        polys_tmp = []
+        parts_tmp = getattr(shape, 'parts', [0])
 
-        for i, part in enumerate(shape.parts):
+        print parts_tmp
 
-            if i == len(shape.parts) - 1:
-                end = len(shape.points) - 1
+        for i, part in enumerate(parts_tmp):
+            if i == len(parts_tmp) - 1:
+                end = len(parts_tmp) - 1
             else:
-                end = shape.parts[i + 1]
-            polygon = shape.points[part:end]
+                end = parts_tmp[i + 1]
+            parts_tmp.append(shape.points[part:end])
 
+        for i, polygon in enumerate(parts_tmp):
             # Reproject all the polygon points from BGS to WGS
             points = [reproject(point, from_proj, to_proj)
                       for point in polygon]
@@ -218,7 +222,7 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
 
             if polyencode:
                 parts.append(encoder.encode([
-                    points[i:i+2] for i in xrange(0, len(points), 2)
+                    points[i:i + 2] for i in xrange(0, len(points), 2)
                 ]))
             else:
                 parts.append(points)
@@ -234,7 +238,7 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             return
         output_file.write(json.dumps(output))
         output_file.write(",\n")
-        print index, len(shape.points)*2, sum_points,
+        print index, len(shape.points) * 2, sum_points,
         if not polyencode:
             print sum_lo_res,
         print
