@@ -117,17 +117,27 @@ function addArea(polygon, map) {
 }
 
 function addPolygon(polygon, map) {
-   data = parsePolygon(polygon);
-   polygon.meta.area = data.area;
-   color = getMapColor();
-   poly = new google.maps.Polygon({
-      'paths': data.paths,
-      'map': map,
-      'strokeWeight': 3,
-      'strokeColor': color,
-      'fillOpacity': 0.25,
-      'fillColor': color
-   });
+   if(polygon.points) {
+      data = parsePolygon(polygon);
+      polygon.meta.area = data.area;
+      color = getMapColor();
+      poly = new google.maps.Polygon({
+         'paths': data.paths,
+         'map': map,
+         'strokeWeight': 3,
+         'strokeColor': color,
+         'fillOpacity': 0.25,
+         'fillColor': color
+      });
+   } else if(polygon.point) {
+      poly = new google.maps.Marker({
+         'flat': true,
+         'optimized': true,
+         'position': new google.maps.LatLng(polygon.point[1], polygon.point[0]),
+         'raiseOnDrag': false,
+         'title': polygon.meta.name
+      });
+   }
    poly.setMap(map);
    google.maps.event.addListener(poly, 'click', function() {
       showInfo(map, polygon, poly);
@@ -182,12 +192,12 @@ function init() {
 
 function init_polygons(map) {
    var polygons = get_polygons();
-   /*for(var i=0; i<polygons.length; i++) {
+   for(var i=0; i<polygons.length; i++) {
       addPolygon(polygons[i], map);
-   }*/
-   for(var i=0; i<3; i++) {
-     addPolygon(polygons[i], map);
    }
+   /*for(var i=0; i<3; i++) {
+     addPolygon(polygons[i], map);
+   }*/
 }
 
 function get_user_location(map) {
