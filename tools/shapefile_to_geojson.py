@@ -177,61 +177,77 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
         sum_lo_res = 0
         polys_tmp = []
         parts_tmp = getattr(shape, 'parts', [0])
+        single_point = False
 
         # Get the points for the seperate parts, if they exist.
-        for i, part in enumerate(parts_tmp):
-            if i == len(parts_tmp) - 1:
-                end = len(parts_tmp) - 1
-            else:
-                end = parts_tmp[i + 1]
-            polys_tmp.append(shape.points[part:end])
+        if len(parts_tmp) == 1:
+            polys_tmp.append(shape.points)
+            single_point = True
+        else:
+            for i, part in enumerate(parts_tmp):
+                if i == len(parts_tmp) - 1:
+                    end = len(parts_tmp) - 1
+                else:
+                    end = parts_tmp[i + 1]
+                polys_tmp.append(shape.points[part:end])
 
         for i, polygon in enumerate(polys_tmp):
             # Reproject all the polygon points from BGS to WGS
             points = [reproject(point, from_proj, to_proj)
                       for point in polygon]
 
-            # Generate low-res version of polygon
-            if not polyencode:
-                points_lo = reduct_func(points, min_res)
-
-            if resolution is not -1:
-                points = reduct_func(points, resolution)
+            # If this is a single point, don't try and simplify it or
+            # encode it.
+            if single_point:
+                parts.append(points[0][0])
+                parts.append(points[0][1])
             else:
-                # Find the polygon with the 'best' number of points.
-                # This means that small areas will stay detailed whilst
-                # large areas don't kill everyone's computers.
-                distance = len(points)
+                # Generate low-res version of polygon
+                if not polyencode:
+                    points_lo = reduct_func(points, min_res)
 
-                for i in xrange(min_res, max_res + 1):
-                    cur_points = reduct_func(points, i)
-                    cur_dist = abs(len(cur_points) - threshold)
+                if resolution is not -1:
+                    points = reduct_func(points, resolution)
+                else:
+                    # Find the polygon with the 'best' number of points.
+                    # This means that small areas will stay detailed whilst
+                    # large areas don't kill everyone's computers.
+                    distance = len(points)
 
-                    if cur_dist < distance:
-                        distance = cur_dist
-                        best_points = cur_points
-                        best_res = i
+                    for i in xrange(min_res, max_res + 1):
+                        cur_points = reduct_func(points, i)
+                        cur_dist = abs(len(cur_points) - threshold)
 
-                points = best_points
-                print best_res,
+                        if cur_dist < distance:
+                            distance = cur_dist
+                            best_points = cur_points
+                            best_res = i
 
-            sum_points += len(points)
-            if not polyencode:
-                sum_lo_res += len(points_lo)
+                    points = best_points
+                    print best_res,
 
-            if polyencode:
-                parts.append(encoder.encode([
-                    points[i:i + 2] for i in xrange(0, len(points), 2)
-                ]))
-            else:
-                parts.append(points)
+                sum_points += len(points)
+                if not polyencode:
+                    sum_lo_res += len(points_lo)
 
-            if not polyencode:
-                lo_res.append(points_lo)
+                if polyencode:
+                    parts.append(encoder.encode([
+                        points[i:i + 2] for i in xrange(0, len(points), 2)
+                    ]))
+                else:
+                    parts.append(points)
 
-        bounds = reproject_bbox(shape.bbox, from_proj, to_proj)
-        output = {"meta": meta, "bounds": bounds,
-                  "lo_res": lo_res, "points": parts}
+                if not polyencode:
+                    lo_res.append(points_lo)
+
+        output = {"meta": meta}
+        if single_point:
+            output["point"] = parts
+        else:
+            bounds = reproject_bbox(shape.bbox, from_proj, to_proj)
+            output["points"] = parts
+            output["bounds"] = bounds
+            output["lo_res"] = lo_res
         if preview is True:
             print json.dumps(output)
             return
