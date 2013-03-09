@@ -1,47 +1,26 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>natureskin</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1.5, maximum-scale=1.5, user-scalable=no" />
-      <link rel="stylesheet" type="text/css" href="app.css">
-      <script type="text/javascript" src="index.js"></script>
-   </head>
-   <body data-theme="b">
-      <div data-position="fixed" data-fullscreen="true"
-           class="ui-body-b" id="map_canvas"></div>
-      <div data-role="page" class="overlay-page" id="map">
-         <div data-role="header" data-position="fixed"
-              class="overlay-page" id="map-toolbar">
-            <a href="#menu" data-icon="grid" data-iconpos="notext"
-               data-transition="slide" data-position-to="window"
-               data-role="button"
-               class="ui-btn-right jqm-grid">Menu</a>
-         </div>
-      </div>
-      <div data-role="popup" id="menu" data-tolerance="0,0">
-         <button data-icon="back">Back</button>
-         <button data-icon="search">Search</button>
-      </div>
-      <div data-role="page" id="settings">
-         <div data-role="header" data-position="fixed">
-            <a href="#map" data-icon="back" data-iconpos="notext"
-               data-direction="reverse"
-               class="ui-btn-left jcm-left">Back to Map</a>
-            <h3>natureskin - Settings</h3>
-         </div>
-      </div>
-      <div data-role="page" id="info">
-         <div data-role="header" data-position="fixed">
-            <a href="#map" data-icon="back" data-iconpos="notext"
-               class="ui-btn-left jcm-left">Back to Map</a>
-            <h3 id="info-name">Area Information</h3>
-         </div>
-         <div data-role="content">
-            <h4>Meta-Data</h4>
-            <hr noshade />
-            <div id="info-meta"></div>
-         </div>
-      </div>
-      <div id="map-colors"></div>
-   </body>
+    <head>
+        <title>natureskin</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1,
+                                       maximum-scale=1, user-scalable=no" />
+        <link rel="stylesheet" type="text/css" href="index.css">
+    </head>
+    <body>
+        <div id="map_canvas" class="fullscreen active"></div>
+        <div id="map" class="page fullscreen overlay active">
+            <div class="overlay toolbar">
+                <a href="#menu" class="button right">MENU</a>
+            </div>
+        </div>
+        <div id="menu" class="page sidebar">
+            <h1>natureskin</h1>
+            <p>This is a huge buttload of text that should wrap lines because
+               it is long and stuff. And eventually this means that the lines
+               will wrap nicely and I can see how it works.</p>
+        </div>
+        <div id="info" class="page fullscreen"></div>
+        <div id="map-colors"></div>
+        <script type="text/javascript" src="index.js"></script>
+    </body>
 </html>
