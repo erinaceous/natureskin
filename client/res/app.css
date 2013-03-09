@@ -52,7 +52,7 @@ html, body {
 .overlay {
     background: transparent !important;
     pointer-events: none;
-    z-index: 1000 !important;
+    //z-index: 1000 !important;
 }
 
 .overlay > * {
@@ -88,24 +88,6 @@ html, body {
     -o-transition: width 1s;
     border-left: 1em solid #9d6;
     overflow-y: auto !important;
-}
-
-@media screen and (min-device-width:1024px) {
-    .sidebar.active {
-        width: 33%;    
-    }
-}
-
-@media screen and(min-device-width:800px) {
-    .sidebar.active {
-        width: 50%;
-    }
-}
-
-@media screen and(min-device-width:480px) {
-    .sidebar.active {
-        width: 75%;
-    }
 }
 
 .top {
@@ -155,3 +137,22 @@ html, body {
 .icon-menu {
     content: 'M';
 }
+
+@media (max-width:1024px) {
+    .sidebar.active {
+        width: 33%;    
+    }
+}
+
+@media (max-width:800px) {
+    .sidebar.active {
+        width: 50%;
+    }
+}
+
+@media (max-width:480px) {
+    .sidebar.active {
+        width: 75%;
+    }
+}
+
