@@ -9,27 +9,41 @@
 html, body {
     font-family: "Droid Sans";
     font-size: 16pt;
-    background-color: black;
+    background-color: transparent;
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
-.page {
-    display: none;
-    background: #ae7;
-    overflow: auto;
+@media (min-device-width:800px) {
+    html, body {
+        font-size: 14pt;
+    }
 }
 
-.page h1, .page h2, .page h3, .page ul, .page ol, .page div, .page p {
-    margin: .5em !important;
+.page {
+    display: none;
+    background: #bf8;
+    overflow: auto;
+    padding: .5em;
+}
+
+.page h1, .page h2, .page h3, .page ul, .page ol, .page p, .page a {
+    padding: .5em;
 }
 
 .page h1 {
     display: block;
-    padding: .25em .5em !important;
-    border-bottom: .25em solid #9d6 !important;
-    margin: 0px -.25em !important;
+    border-bottom: .25em solid #ae7 !important;
+    float: left;
+    clear: both;
+    width: 100%;
+    margin: -.25em -.25em .25em -.25em;
+    padding: .25em .5em;
+}
+
+.fixed {
+    position: fixed;
 }
 
 .active {
@@ -56,14 +70,13 @@ html, body {
 }
 
 .overlay > * {
-    pointer-events: all;
+    pointer-events: all !important;
 }
 
 .toolbar {
     position: fixed;
     left: 0px;
     right: 0px;
-    //padding: .5em !important;
 }
 
 .sidebar {
@@ -74,20 +87,26 @@ html, body {
     width: 0px;
     border: none;
     overflow: hidden;
-    transition: width 1s;
-    -webkit-transition: width 1s;
-    -moz-transition: width 1s;
-    -o-transition: width 1s;
+    opacity: 0;
+}
+
+.animate {
+    transition: all 1s !important;
+    -webkit-transition: all 1s !important;
+    -moz-transition: all 1s !important;
+    -o-transition: all 1s !important;
+}
+
+.sidebar hr {
+    visibility: hidden;
+    height: 3.75em;
 }
 
 .sidebar.active {
     width: 25%;
-    transition: width 1s;
-    -webkit-transition: width 1s;
-    -moz-transition: width 1s;
-    -o-transition: width 1s;
-    border-left: 1em solid #9d6;
+    border-left: 1em solid #ae7;
     overflow-y: auto !important;
+    opacity: 1;
 }
 
 .top {
@@ -99,16 +118,21 @@ html, body {
 }
 
 .left {
-    float: left;
+    position: absolute;
+    left: .5em;
+    //float: left;
+    //margin-left: .5em;
 }
 
 .right {
-    float: right;
+    position: absolute;
+    right: .5em;
+    //float: right;
+    //margin-right: .5em;
 }
 
 .button {
     display: inline-block;
-    padding: .5em !important;
     font-weight: bold;
     background: #069;
     border: 1px solid #07a;
@@ -136,6 +160,13 @@ html, body {
 
 .icon-menu {
     content: 'M';
+}
+
+#logo {
+    clear: both;
+    background-color: #a9ed76;
+    color: #8c5;
+    text-shadow: 0px 0px 3px #ae7;
 }
 
 @media (max-width:1024px) {
