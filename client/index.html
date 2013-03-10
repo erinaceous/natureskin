@@ -7,33 +7,43 @@
         <link rel="stylesheet" type="text/css" href="index.css">
     </head>
     <body>
-        <div id="map_canvas" class="fullscreen active"></div>
-        <div id="map" class="page fullscreen overlay active">
+        <div id="map_canvas" class="fullscreen always-active"></div>
+        <div id="map" class="page fullscreen overlay always-active">
             <div class="overlay toolbar">
-                <a href="#menu" class="button right icon">=</a>
+                <a href="#menu" class="button right icon">&laquo;</a>
             </div>
         </div>
         <div id="menu" class="page sidebar animate">
             <div id="logo">
-                <a href="#menu" class="button left pad-top icon">X</a>
+                <a href="#menu" class="button left pad-top icon">&raquo;</a>
                 <h1>natureskin</h1>
             </div>
             <ul>
-                <li><a>Search</a></li>
-                <li><a>What's Around Me?</a></li>
-                <li><a>Map Settings</a></li>
-                <li><a><span class="indicator" id="in-mapItems">0</span> Items</a></li>
+                <li><a class="buttonlike" href="#search">Search</a></li>
+                <li><a class="buttonlike" href="#whatsaround">What's Around Me?</a></li>
+                <li><a class="buttonlike" href="#settings">Map Settings</a></li>
+                <li><a class="buttonlike" href="#items"><span class="indicator" id="in-mapItems">0</span> Items</a></li>
+                <li><a class="buttonlike" href="#about">About This</a></li>
             </ul>
             <p>This is a huge buttload of text that should wrap lines because
                it is long and stuff. And eventually this means that the lines
                will wrap nicely and I can see how it works.</p>
-            <p>Lorem ipsum lolol</p>
-            <p>Schlorem schlipsum schlololol</p>
-            <p>aeiou!</p>
-            <p>John Madden! John Madden! John Madden! John Madden!</p>
-            <p>FOOTBALL</p>
         </div>
         <div id="info" class="page fullscreen"></div>
+        <div id="search" class="page fullscreen">
+            <a href="#search" class="button right pad-top icon">x</a>
+            <h1>Search</h1>
+        </div>
+        <div id="whatsaround" class="page fullscreen">
+            <h1>What's Around</h1>
+        </div>
+        <div id="settings" class="page fullscreen">
+            <h1>Settings</h1>
+        </div>
+        <div id="about" class="page fullscreen">
+            <h1>About natureskin</h1>
+            <p>TODO: Write this.</p>
+        </div>
         <div id="map-colors"></div>
         <script type="text/javascript" src="index.js"></script>
     </body>

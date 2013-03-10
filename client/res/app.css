@@ -34,7 +34,7 @@ html, body {
 }
 
 .page h1 {
-    text-align: right;
+    text-align: center;
     background-color: inherit;
     margin: 0;
     padding: .35em .25em;
@@ -53,11 +53,7 @@ html, body {
     margin-right: .5em;
 }
 
-.active {
-    display: block !important;
-}
-
-.active > div {
+.active, .always-active {
     display: block !important;
 }
 
@@ -94,9 +90,11 @@ html, body {
     right: -25%;
     width: 25%;
     border: none;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    border-left: 1em solid #cea;
     display: block;
-    visibility: hidden;
+    opacity: 0;
 }
 
 .animate {
@@ -107,11 +105,9 @@ html, body {
 }
 
 .sidebar.active {
-    right: 0px;
-    border-left: 1em solid #cea;
-    overflow-y: auto !important;
-    opacity: 1;
     visibility: visible;
+    right: 0px;
+    opacity: 1;
 }
 
 .top {
@@ -182,12 +178,12 @@ html, body {
     padding: 1em;
     border-top: 1px solid #9c7;
     border-left: 1em solid #9c7;
+    color: black;
 }
 
 .sidebar ul li a:hover {
     border-color: #79c;
     background-color: #ace;
-    color: black;
 }
 
 .sidebar ul li a:hover > * {
@@ -204,6 +200,7 @@ html, body {
     background-color: #caeca8;
     color: #ac8;
     text-shadow: 0px 0px 3px #cea;
+    text-align: right;
 }
 
 @media (max-width:1024px) {
