@@ -34,6 +34,30 @@ database = {
         this.hasUpdated = true;
     },
 
+    /* Add a single area into memory. */
+    load_area: function(key, data, onLoad) {
+        if(this.layers[key]) {
+            this.layers[key].areas.push(data);
+        } else {
+            this.layers[key] = {"areas": [data]};
+        }
+        if(typeof(onLoad) === "function") {
+            onLoad();
+        }
+        this.hasUpdated = true;
+    },
+
+    load_from_file: function(key, data, onLoad) {
+        var object;
+        for(object in data) {
+            this.load_area(key, data[object]);
+        }
+        if(typeof(onLoad) === "function") {
+            onLoad();
+        }
+        this.hasUpdated = true;
+    },
+
     /* Unload a layer's areas from memory */
     unload: function(key) {
         this.layers[key].areas = null;
@@ -90,7 +114,7 @@ database = {
         if(this.hasUpdated === true) {
             /* Database has been updated whilst we've been querying it!
              * So restart the query - discard our results so far. */
-            objects = []
+            objects = [];
             for(layer in this.layers) {
                 for(object in this.layers[layer].areas) {
                     objects.push(this.layers[layer].areas[object]);

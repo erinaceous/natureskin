@@ -13,6 +13,13 @@ utils = {
     levenshtein: function(first, second) {
         // TODO: Complete this function.
         return 0;
+    },
+
+    /* Helper function; String.prototype.toTitleCase can't be used
+     * by normalize.js (it returns [object object]), so provide a
+     * wrapper for it. */
+    toTitleCase: function(str) {
+        return str.toTitleCase();
     }
 };
 
@@ -59,6 +66,13 @@ String.prototype.contains = function(str) {
     }
     return false;
 };
+
+String.prototype.toTitleCase = function(str) {
+    return this.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() +
+               txt.substr(1).toLowerCase();
+    });
+}
 
 /* I am super lazy and pythonic */
 function pass() {};

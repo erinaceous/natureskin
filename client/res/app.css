@@ -27,6 +27,7 @@ html, body {
     overflow: auto;
     margin: 0;
     padding: 0;
+    background-clip: content-box;
 }
 
 .page h1, .page h2, .page h3, .page ul, .page ol, .page p {
@@ -92,7 +93,7 @@ html, body {
     border: none;
     overflow-x: hidden;
     overflow-y: auto !important;
-    border-left: 1em solid #cea;
+    border-left: 1em solid #cea; //#cceeaa
     display: block;
     opacity: 0;
 }
@@ -162,7 +163,8 @@ html, body {
     overflow: hidden;
     background-position: left center;
     background-repeat: none;
-    font-family: flat-ui;
+    //font-family: flat-ui;
+    font-family: monospace;
     font-size: 16pt;
 }
 
@@ -188,6 +190,16 @@ html, body {
 
 .sidebar ul li a:hover > * {
     color: black;
+}
+
+.dialog {
+    top: 2%;
+    right: 2%;
+    bottom: 2%;
+    left: 2%;
+    border: 1em solid rgba(153,187,255,0.5);
+    //background-color: #cef;
+    background-color: rgba(204,238,255,0.75);
 }
 
 .sidebar ul li a:active {

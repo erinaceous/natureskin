@@ -10,6 +10,35 @@
  * Author: Owain Jones [github.com/doomcat]
  */
 
-neurotypical = {
-    
+normalizer = {
+    clone: function(object) {
+        return JSON.parse(JSON.stringify(object));
+    },
+
+    toTitleCase: function(string) {
+        return string.replace(/\w\*/g, function(txt) {
+            return txt.charAt(0).toUpperCase() +
+                   txt.substr(1).toLowerCase();
+        });
+    },
+
+    Neurotype: function(mappings, functions) {
+        this.mappings = mappings;
+        this.functions = functions;
+
+        this.behave = function(object) {
+            var mapping;
+            var current;
+            clone = normalizer.clone(object);
+            for(mapping in this.mappings) {
+                clone[this.mappings[mapping]] = clone[mapping];
+            }
+            for(mapping in this.functions) {
+                clone[mapping] = this.functions[mapping](
+                    clone[mapping], clone
+                );
+            }
+            return clone;
+        };
+    }
 };

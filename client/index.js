@@ -20,8 +20,12 @@ scripts = [
     "res/app.js",
     "res/ui.js",
     //"data/magaonb.json",
+    //"data/magaonb.merged.json",
     //"data/Ancient_Woodland_Inventory_v2-0.json",
-    "data/magwhi.json"
+    //"data/Ancient_Woodland_Inventory_v2-0.merged.json",
+    //"data/magwhi.json",
+    //"data/magwhi.merged.json",
+    "data/nnr.merged.json",
 ];
 
 for(script in scripts) {

@@ -158,12 +158,13 @@ function addRect(polygon, map) {
 }
 
 function showInfo(map, polygon, marker) {
-   output="<div data-role='content' style='padding: 0px 1em'>\n";
+   output = ""
+//   output="<div data-role='content' style='padding: 0px 1em'>\n";
    for(var item in polygon.meta) {
       output += "<p><b>"+item+"</b>: "+polygon.meta[item]+"</p>\n";
    }
-   output += "</div>";
-   $('<div/>').simpledialog2({
+//   output += "</div>";
+/*   $('<div/>').simpledialog2({
       'mode': 'blank',
       'width': '360px',
       'headerText': polygon.meta.nnr_name,
@@ -172,7 +173,9 @@ function showInfo(map, polygon, marker) {
       'showModal': false,
       'blankContentAdopt': true,
       'fullScreen': true
-   });
+   }); */
+   $('#info-internal').html(output);
+   $('#info').addClass('active');
 }
 
 function init() {
@@ -191,7 +194,8 @@ function init() {
 }
 
 function init_polygons(map) {
-   var polygons = get_polygons();
+   //var polygons = get_polygons();
+   var polygons = database.layers['nnr'].areas
    for(var i=0; i<polygons.length; i++) {
       addPolygon(polygons[i], map);
    }
