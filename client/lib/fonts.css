@@ -1,16 +1,20 @@
 @font-face {
-  font-family: 'Droid Sans';
+  font-family: droid-sans;
   font-style: normal;
   font-weight: 400;
-  src: local('Droid Sans'), local('DroidSans'), 
-url(./DroidSans.ttf) 
-format('woff');
+  src: local('Droid Sans'), local('DroidSans'), url('./DroidSans.ttf') format('truetype');
 }
 @font-face {
-  font-family: 'Droid Sans';
+  font-family: droid-sans;
   font-style: normal;
   font-weight: 700;
-  src: local('Droid Sans Bold'), local('DroidSans-Bold'), 
-url(./DroidSans-Bold.ttf) 
-format('woff');
+  src: local('Droid Sans Bold'), local('DroidSans-Bold'), url('./DroidSans-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: flat-ui;
+  src: url('./flat-ui/fonts/Flat-UI-Icons-16.svg') format('svg');
+}
+@font-face {
+  font-family: flat-ui-big;
+  src: url('./flat-ui/fonts/Flat-UI-Icons-24.svg') format('svg');
 }

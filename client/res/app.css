@@ -7,7 +7,7 @@
 }
 
 html, body {
-    font-family: "Droid Sans";
+    font-family: droid-sans;
     font-size: 16pt;
     background-color: transparent;
     width: 100%;
@@ -23,27 +23,34 @@ html, body {
 
 .page {
     display: none;
-    background: #bf8;
+    background: #dfb;
     overflow: auto;
-    padding: .5em;
+    margin: 0;
+    padding: 0;
 }
 
-.page h1, .page h2, .page h3, .page ul, .page ol, .page p, .page a {
-    padding: .5em;
+.page h1, .page h2, .page h3, .page ul, .page ol, .page p {
+    padding: 1em;
 }
 
 .page h1 {
-    display: block;
-    border-bottom: .25em solid #ae7 !important;
-    float: left;
-    clear: both;
-    width: 100%;
-    margin: -.25em -.25em .25em -.25em;
-    padding: .25em .5em;
+    text-align: right;
+    background-color: inherit;
+    margin: 0;
+    padding: .35em .25em;
 }
 
 .fixed {
     position: fixed;
+}
+
+.indicator {
+    background-color: #ffd;
+    font-weight: bold;
+    color: #9c7;
+    border-radius: 1em;
+    padding: .5em;
+    margin-right: .5em;
 }
 
 .active {
@@ -77,17 +84,19 @@ html, body {
     position: fixed;
     left: 0px;
     right: 0px;
+    padding: .5em 0px;
 }
 
 .sidebar {
     position: fixed;
     top: 0px;
     bottom: 0px;
-    right: 0px;
-    width: 0px;
+    right: -25%;
+    width: 25%;
     border: none;
     overflow: hidden;
-    opacity: 0;
+    display: block;
+    visibility: hidden;
 }
 
 .animate {
@@ -97,16 +106,12 @@ html, body {
     -o-transition: all 1s !important;
 }
 
-.sidebar hr {
-    visibility: hidden;
-    height: 3.75em;
-}
-
 .sidebar.active {
-    width: 25%;
-    border-left: 1em solid #ae7;
+    right: 0px;
+    border-left: 1em solid #cea;
     overflow-y: auto !important;
     opacity: 1;
+    visibility: visible;
 }
 
 .top {
@@ -117,21 +122,26 @@ html, body {
     bottom: 0px;
 }
 
+.pad-top {
+    margin-top: .5em;
+}
+
 .left {
-    position: absolute;
-    left: .5em;
-    //float: left;
+    //position: absolute;
+    //left: 0px;
+    float: left;
     //margin-left: .5em;
 }
 
 .right {
-    position: absolute;
-    right: .5em;
-    //float: right;
-    //margin-right: .5em;
+    //position: absolute;
+    //right: .5em;
+    float: right;
+    margin-right: .5em;
 }
 
 .button {
+    padding: .5em;
     display: inline-block;
     font-weight: bold;
     background: #069;
@@ -156,34 +166,63 @@ html, body {
     overflow: hidden;
     background-position: left center;
     background-repeat: none;
+    font-family: flat-ui;
+    font-size: 16pt;
 }
 
-.icon-menu {
-    content: 'M';
+.sidebar ul {
+    list-style-type: none;
+    margin: 0px -.25em;
+    padding: 0;
+    border-bottom: 1px solid #9c7;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 1em;
+    border-top: 1px solid #9c7;
+    border-left: 1em solid #9c7;
+}
+
+.sidebar ul li a:hover {
+    border-color: #79c;
+    background-color: #ace;
+    color: black;
+}
+
+.sidebar ul li a:hover > * {
+    color: black;
+}
+
+.sidebar ul li a:active {
+    border-color: #9bf;
+    background-color: #cef;
 }
 
 #logo {
     clear: both;
-    background-color: #a9ed76;
-    color: #8c5;
-    text-shadow: 0px 0px 3px #ae7;
+    background-color: #caeca8;
+    color: #ac8;
+    text-shadow: 0px 0px 3px #cea;
 }
 
 @media (max-width:1024px) {
-    .sidebar.active {
-        width: 33%;    
+    .sidebar {
+        width: 33%;
+        right: -33%;
     }
 }
 
 @media (max-width:800px) {
-    .sidebar.active {
-        width: 50%;
+    .sidebar {
+        right: -50%;
     }
 }
 
 @media (max-width:480px) {
-    .sidebar.active {
+    .sidebar {
         width: 75%;
+        right: -75%;
     }
 }
 
