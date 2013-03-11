@@ -43,7 +43,7 @@ function parsePolygon(polygon) {
       }
       paths.push(coords);
       area += google.maps.geometry.spherical.computeArea(
-                coords);
+                coords) / 10000;
    }
    return {"paths": paths, "area": area};
 }
@@ -73,13 +73,15 @@ function addPolygonReduced(polygon, map) {
       }
       paths.push(coords);
    }
-   polygon.meta.area = data.area;
+   if(!polygon.meta.area) {
+      polygon.meta.area = data.area;
+   }
    var color = getMapColor();
    poly = new google.maps.Polygon({
       'paths': paths,
       'fillColor': color,
       'strokeColor': color,
-      'fillOpacity': 0.25
+      'fillOpacity': 0.33
    });
    poly.setMap(map);
    google.maps.event.addListener(poly, 'click', function() {
