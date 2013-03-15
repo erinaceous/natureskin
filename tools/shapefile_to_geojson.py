@@ -108,7 +108,8 @@ algorithms = {
 def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             resolution=-1, threshold=300, output_path=None,
             reduct_func=reduce_wgs, prefix="", suffix="",
-            polyencode=True, preview=False):
+            polyencode=True, polyencode_extra=True,
+            preview=False, shp_index=-1):
     """Takes a shapefile dataset and iterates over it, converting
        coordinates to the new projection on-the-fly.
 
@@ -141,6 +142,9 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
        preview:     If True, this function won't write to any files.
                     Instead, it prints out the first object in its
                     JSON form and then returns.
+       shp_index:   If not -1, this function outputs only the data for
+                    the shape at that index in the .shp file.
+                    (Index starts at 0)
 
        Returns:     Nothing - creates a new file for the output. Default
                     is <input filename base>.json
@@ -156,9 +160,14 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
         output_file = open(os.path.splitext(input)[0] + '.json', 'w+')
 
     output_file.write(prefix)
-    output_file.write('[\n')
 
     for index, shape in enumerate(sf.shapes_iter()):
+        if shp_index != -1:
+            if index < shp_index:
+                continue
+            elif index > shp_index:
+                break
+
         # Parse the shapefile recordset for this shape's associated
         # record
         # Fields are out of order! FIX
@@ -178,11 +187,14 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
         polys_tmp = []
         parts_tmp = getattr(shape, 'parts', [0])
         single_point = False
+        polycodes = []
+
+        if len(shape.points) == 1:
+            single_point = True
 
         # Get the points for the seperate parts, if they exist.
         if len(parts_tmp) == 1:
             polys_tmp.append(shape.points)
-            single_point = True
         else:
             for i, part in enumerate(parts_tmp):
                 if i == len(parts_tmp) - 1:
@@ -195,6 +207,8 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             # Reproject all the polygon points from BGS to WGS
             points = [reproject(point, from_proj, to_proj)
                       for point in polygon]
+
+            print points
 
             # If this is a single point, don't try and simplify it or
             # encode it.
@@ -230,10 +244,15 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
                 if not polyencode:
                     sum_lo_res += len(points_lo)
 
-                if polyencode:
-                    parts.append(encoder.encode([
+                if polyencode or polyencode_extra:
+                    #parts.append(encoder.encode([
+                    polycode = encoder.encode([
                         points[i:i + 2] for i in xrange(0, len(points), 2)
-                    ]))
+                    ])
+                    polycodes.append(polycode)
+                    #]))
+                if polyencode and not polyencode_extra:
+                    parts.append(polycode)
                 else:
                     parts.append(points)
 
@@ -248,6 +267,8 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             output["points"] = parts
             output["bounds"] = bounds
             output["lo_res"] = lo_res
+        if polyencode_extra:
+            output["encoded"] = polycodes
         if preview is True:
             print json.dumps(output)
             return
@@ -258,7 +279,6 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             print sum_lo_res,
         print
 
-    output_file.write("]")
     output_file.write(suffix)
     output_file.close()
 
@@ -288,13 +308,19 @@ def main():
                         help="Method to reduce number of points in shape. " +
                              "Available: %s" % ', '.join(algorithms.keys()))
     parser.add_argument("--output-prefix",
-                        default="var areas_data = ")
+                        default="")
     parser.add_argument("--output-suffix",
-                        default=";")
+                        default="")
     parser.add_argument("--no-polyencode", action="store_true", default=False,
                         help="Don't encode into google's polyline encoding")
+    parser.add_argument("--also-polyencode", action="store_true",
+                        default=False,
+                        help="ALSO encode into google's poyline.")
     parser.add_argument("--preview", action="store_true", default=False,
                         help="Don't write to file, just show first result")
+    parser.add_argument("--index", type=int, default=-1,
+                        help="Output only the shape at this index in the " +
+                             "file. Index starts at 0.")
     args = parser.parse_args()
 
     global from_proj, to_proj
@@ -305,10 +331,11 @@ def main():
         convert(input, from_proj=from_proj, to_proj=to_proj,
                 min_res=args.min_resolution, max_res=args.max_resolution,
                 resolution=args.resolution, threshold=args.points_threshold,
-                output_path=args.output,
+                output_path=args.output, polyencode_extra=args.also_polyencode,
                 reduct_func=algorithms[args.reduction_method],
                 prefix=args.output_prefix, suffix=args.output_suffix,
-                polyencode=~args.no_polyencode, preview=args.preview)
+                polyencode=~args.no_polyencode, preview=args.preview,
+                shp_index=args.index)
 
 
 if __name__ == '__main__':
