@@ -19,14 +19,12 @@ scripts = [
     "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s",
     "res/app.js",
     "res/ui.js",
-    //"data/magaonb.json",
-    //"data/magaonb.merged.json",
-    //"data/Ancient_Woodland_Inventory_v2-0.json",
-    //"data/Ancient_Woodland_Inventory_v2-0.merged.json",
-    //"data/magwhi.json",
-    //"data/magwhi.merged.json",
-    "data/nnr.merged.json",
-];
+    "data/areas_of_natural_beauty.json",
+    "data/country_parks.json",
+    "data/ancient_woodlands.json",
+    "data/walking_for_health.json",
+    "data/national_trails.json",
+ ];
 
 for(script in scripts) {
     script = scripts[script];

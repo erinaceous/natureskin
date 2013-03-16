@@ -154,9 +154,20 @@ html, body {
     background-color: #17a;
 }
 
-.button:active {
+.button:active, .button.on, .button.toggle.on {
+    color: white;
     border-color: #29c;
     background-color: #28b;
+}
+
+.button.full {
+    display: block;
+}
+
+.button.toggle {
+   color: #ccc;
+   background-color: #999;
+   border-color: #bbb;
 }
 
 .icon {
@@ -175,12 +186,23 @@ html, body {
     border-bottom: 1px solid #9c7;
 }
 
-.sidebar ul li a {
+.sidebar ul li a, .sidebar ul .submenu {
     display: block;
     padding: 1em;
     border-top: 1px solid #9c7;
     border-left: 1em solid #9c7;
     color: black;
+}
+
+.sidebar ul .submenu {
+   font-size: 75%;
+   padding: 0px;
+   display: none;
+   border-color: #c97;
+}
+
+.sidebar ul .submenu.active {
+   display: block;
 }
 
 .sidebar ul li a:hover {
@@ -192,14 +214,27 @@ html, body {
     color: black;
 }
 
+.submenu > .button.full {
+   margin: .5em 0px;
+}
+
+.submenu {
+   text-align: center;
+}
+
 .dialog {
     top: 2%;
     right: 2%;
     bottom: 2%;
     left: 2%;
     border: 1em solid rgba(153,187,255,0.5);
-    //background-color: #cef;
-    background-color: rgba(204,238,255,0.75);
+    background-color: #cef;
+    /*background-color: rgba(204,238,255,0.75);*/
+   border-radius: 1em;
+   -webkit-border-radius: 1em;
+   -moz-border-radius: 1em;
+   -ms-border-radius: 1em;
+   -o-border-radius: 1em;
 }
 
 .sidebar ul li a:active {

@@ -208,7 +208,7 @@ def convert(input, from_proj, to_proj, min_res=1, max_res=5,
             points = [reproject(point, from_proj, to_proj)
                       for point in polygon]
 
-            print points
+            #print points
 
             # If this is a single point, don't try and simplify it or
             # encode it.

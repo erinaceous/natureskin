@@ -12,13 +12,34 @@
 """
 
 import argparse
+import urlparse
 import json
 import sys
 import re
 
 
-def normalize(input, merge_key, remap_keys, remove_keys,
-              strip=True, lower_urls=True, prefix="", suffix=""):
+def get_center(bounds):
+    """Get the center of a rectangle."""
+    top = bounds[3]
+    left = bounds[0]
+    bottom = bounds[1]
+    right = bounds[2]
+    return [left + (abs(right - left) / 2.0),
+            bottom + (abs(top - bottom) / 2.0)]
+
+
+def is_url(string):
+    """Check if a string contains a URL, and nothing but a URL."""
+    try:
+        parts = urlparse.urlsplit(string)
+        return not (not parts.scheme or not parts.netloc)
+    except:
+        return False
+
+
+def normalize(input, merge_key, remap_keys, remove_keys, add_keys=[],
+              add_centers=False, strip=True, lower_urls=True,
+              titlecase=False, prefix="", suffix=""):
     """Normalize a JSON file. Merge objects if two or more have
        identical values associated with the dictionary keys defined in
        merge_keys.
@@ -33,6 +54,7 @@ def normalize(input, merge_key, remap_keys, remove_keys,
                     to 'name', do 'nnr_name=name'.
        remove_keys: A comma-seperated string, or a list, of keys to
                     remove from the final (merged) JSON objects.
+       add_keys:    A list of keys to add (and their values)
        lower_urls:  If True, check to see if string properties are URLs,
                     and if they are, transform them to lowercase
                     (lots of the datasets have URLs in UPPERCASE).
@@ -40,6 +62,7 @@ def normalize(input, merge_key, remap_keys, remove_keys,
                     forces those fields specifically to be lowercased
                     without first checking if they're URLS.
        strip:       If True, get rid of fields that are just whitespace.
+       titlecase:   If True, make the 'name' property Title Case.
        prefix:      String to prepend to output.
        suffix:      String to append to output.
 
@@ -50,9 +73,15 @@ def normalize(input, merge_key, remap_keys, remove_keys,
     print prefix,
 
     if type(remap_keys) == str:
-        remap_keys = remap_keys.split(',')
+        try:
+            remap_keys = remap_keys.split(',')
+        except:
+            remap_keys = []
     if type(remove_keys) == str:
-        remove_keys = remove_keys.split(',')
+        try:
+            remove_keys = remove_keys.split(',')
+        except:
+            remove_keys = []
     if remap_keys == ['']:
         remap_keys = []
     if remove_keys == ['']:
@@ -72,8 +101,8 @@ def normalize(input, merge_key, remap_keys, remove_keys,
             continue
 
         for remap_key in remap_keys:
-            remap_key_from, remap_key_to = remap_key.split('=')
             try:
+                remap_key_from, remap_key_to = remap_key.split('=')
                 object['meta'][remap_key_to] = object['meta'][remap_key_from]
                 del object['meta'][remap_key_from]
             except:
@@ -83,10 +112,16 @@ def normalize(input, merge_key, remap_keys, remove_keys,
         if key not in objects.keys():
             objects[key] = object
         else:
-            objects[key]['points'].extend(object['points'])
-            objects[key]['bounds'] = rebound(
-                objects[key]['bounds'], object['bounds']
-            )
+            try:
+                objects[key]['points'].extend(object['points'])
+                objects[key]['bounds'] = rebound(
+                    objects[key]['bounds'], object['bounds']
+                )
+                objects[key]['encoded'].extend(object['encoded'])
+                objects[key]['lo_res'].extend(object['lo_res'])
+                objects[key]['meta'].update(object['meta'])
+            except KeyError:
+                pass
             duplicates += 1
         for remove_key in remove_keys:
             try:
@@ -99,10 +134,33 @@ def normalize(input, merge_key, remap_keys, remove_keys,
                     if re.match('^\W*$', objects[key]['meta'][strip_key])\
                     is not None:
                         del objects[key]['meta'][strip_key]
+        if lower_urls:
+            for url_key in objects[key]['meta'].keys():
+                if is_url(objects[key]['meta'][url_key]):
+                    objects[key]['meta'][url_key] =\
+                        objects[key]['meta'][url_key].lower()
 
-        if objects[key]['lo_res']:
-            if objects[key]['lo_res'] == []:
-                del objects[key]['lo_res']
+        for del_key in ['lo_res', 'encoded', 'points']:
+            if del_key in objects[key].keys()\
+            and objects[key][del_key] in [[], ""]:
+                del objects[key][del_key]
+
+        for new in add_keys:
+            new_key, new_val = new.split('=')
+            objects[key]['meta'][new_key] = new_val
+
+        if add_centers:
+            if 'point' in objects[key]:
+                objects[key]['center'] = objects[key]['point']
+            else:
+                objects[key]['center'] = get_center(objects[key]['bounds'])
+
+        if titlecase:
+            try:
+                objects[key]['meta']['name'] =\
+                    objects[key]['meta']['name'].title()
+            except KeyError as e:
+                pass
 
     print json.dumps(objects, sort_keys=True, separators=(',', ':')),
     print suffix
@@ -136,6 +194,10 @@ if __name__ == '__main__':
     parser.add_argument("remove_keys", default="",
                         help="Comma-seperated list of keys to remove from " +
                              "the final (merged) JSON objects.")
+    parser.add_argument("--add_keys", nargs="+", default=[])
+    parser.add_argument("--add-centers", action="store_true", default=False,
+                        help="If True - calculate 'center' from bounds and " +
+                             "stick it in objects' fields.")
     parser.add_argument("--lower-urls", "-l", action="store_true",
                         default=False,
                         help="If True, check to see if string properties are" +
@@ -143,11 +205,17 @@ if __name__ == '__main__':
     parser.add_argument("--strip", "-s", action="store_true", default=False,
                         help="If True, check for blank fields (all " +
                              "whitespace), and remove them.")
+    parser.add_argument("--titlecase", "-t", action="store_true",
+                        default=False,
+                        help="If True, make the 'name' property Title Case.")
     parser.add_argument("--prefix", default="")
+    parser.add_argument("--delimiter", default="")
     parser.add_argument("--suffix", default="")
     args = parser.parse_args()
 
     normalize(input=args.input, merge_key=args.merge_key,
               remap_keys=args.remap_keys, remove_keys=args.remove_keys,
-              strip=args.strip, lower_urls=args.lower_urls,
-              prefix=args.prefix, suffix=args.suffix)
+              add_keys=args.add_keys, strip=args.strip,
+              lower_urls=args.lower_urls, prefix=args.prefix,
+              suffix=args.suffix, add_centers=args.add_centers,
+              titlecase=args.titlecase)

@@ -28,22 +28,31 @@ function initMapColors() {
 function parsePolygon(polygon) {
    var paths = new Array();
    var area = 0;
-   for(var x=0; x<polygon.points.length; x++) {
-      if(Array.isArray(polygon.points[x])) {
-         var coords = new Array();
-         for(var i=1; i<polygon.points[x].length; i+=2) {
-            coords.push(new google.maps.LatLng(
-               polygon.points[x][i-1], polygon.points[x][i]
-            ));
-         }
-      } else {
+   if(polygon.encoded) {
+      for(var x=0; x<polygon.encoded.length; x++) {
          var coords = google.maps.geometry.encoding.decodePath(
-            polygon.points[x].points
+            polygon.encoded[x].points
          );
+         paths.push(coords);
+         area += google.maps.geometry.spherical.computeArea(coords) / 10000;
       }
-      paths.push(coords);
-      area += google.maps.geometry.spherical.computeArea(
-                coords) / 10000;
+   } else {
+      for(var x=0; x<polygon.points.length; x++) {
+         if(Array.isArray(polygon.points[x])) {
+            var coords = new Array();
+            for(var i=1; i<polygon.points[x].length; i+=2) {
+               coords.push(new google.maps.LatLng(
+                  polygon.points[x][i-1], polygon.points[x][i]
+               ));
+            }
+         } else {
+            var coords = google.maps.geometry.encoding.decodePath(
+               polygon.points[x].points
+            );
+         }
+         paths.push(coords);
+         area += google.maps.geometry.spherical.computeArea(coords) / 10000;
+      }
    }
    return {"paths": paths, "area": area};
 }
@@ -119,7 +128,7 @@ function addArea(polygon, map) {
 }
 
 function addPolygon(polygon, map) {
-   if(polygon.points) {
+   if(polygon.points || polygon.encoded) {
       data = parsePolygon(polygon);
       polygon.meta.area = data.area;
       color = getMapColor();
@@ -161,21 +170,9 @@ function addRect(polygon, map) {
 
 function showInfo(map, polygon, marker) {
    output = ""
-//   output="<div data-role='content' style='padding: 0px 1em'>\n";
    for(var item in polygon.meta) {
       output += "<p><b>"+item+"</b>: "+polygon.meta[item]+"</p>\n";
    }
-//   output += "</div>";
-/*   $('<div/>').simpledialog2({
-      'mode': 'blank',
-      'width': '360px',
-      'headerText': polygon.meta.nnr_name,
-      'headerClose': true,
-      'blankContent': output,
-      'showModal': false,
-      'blankContentAdopt': true,
-      'fullScreen': true
-   }); */
    $('#info-internal').html(output);
    $('#info').addClass('active');
 }
@@ -196,14 +193,12 @@ function init() {
 }
 
 function init_polygons(map) {
-   //var polygons = get_polygons();
-   var polygons = database.layers['nnr'].areas
-   for(var i=0; i<polygons.length; i++) {
-      addPolygon(polygons[i], map);
+   for(var polygons in database.layers) {
+      polygons = database.layers[polygons].areas
+      for(var i=0; i<polygons.length; i++) {
+         addPolygon(polygons[i], map);
+      }
    }
-   /*for(var i=0; i<3; i++) {
-     addPolygon(polygons[i], map);
-   }*/
 }
 
 function get_user_location(map) {
