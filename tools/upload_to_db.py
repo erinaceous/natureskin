@@ -81,7 +81,10 @@ def main():
             data[key]['center'] =\
                 normalize_metadata.get_center(data[key]['bounds'])
         _id = collection.insert(data[key])
-        print "Uploaded", data[key]['name'], "- ID:", _id
+        try:
+            print "Uploaded", data[key]['name'], "- ID:", _id
+        except KeyError:
+            print "Uploaded - ID:", _id
 
 
 if __name__ == '__main__':

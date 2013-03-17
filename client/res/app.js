@@ -279,6 +279,7 @@ function init() {
    map.userMarker = null;
    get_user_location(centerOnUser);
    init_polygons(map);
+   openPage("#menu");
 }
 
 function init_polygons(map) {
