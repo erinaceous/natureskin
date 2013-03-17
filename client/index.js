@@ -17,7 +17,7 @@ scripts = [
     "res/utils.js",
     "res/database.js",
     "res/normalize.js",
-    "http://ns.odj.me/api.js",
+    "api.js",
     "res/simple_map_style.js",
     "http://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s",
     "res/app.js",

@@ -61,6 +61,26 @@ database = {
         this.hasUpdated = true;
     },
 
+    load_from_json: function(data) {
+        var new_data = {};
+        var keys = ['point', 'points', 'encoded', 'lo_res', 'bounds',
+                    'center'];
+        var key;
+        for(key in keys) {
+            key = keys[key];
+            if(data[key]) {
+                new_data[key] = data[key];
+                delete data[key];
+            }
+        }
+        new_data.meta = {};
+        for(key in data) {
+            new_data.meta[key] = data[key];
+        }
+        this.load_area(new_data.meta.type, new_data);
+        return new_data;
+    },
+
     /* Unload a layer's areas from memory */
     unload: function(key) {
         this.layers[key].areas = null;

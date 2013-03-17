@@ -127,8 +127,11 @@ function addArea(polygon, map) {
    });
 }
 
-function addPolygon(polygon, map) {
+function addPolygon(polygon, visible) {
    var poly;
+   if(!visible) {
+      var visible = false;
+   }
    if(polygon.points || polygon.encoded) {
       data = parsePolygon(polygon);
       polygon.meta.area = data.area;
@@ -151,21 +154,23 @@ function addPolygon(polygon, map) {
          'icon': 'res/tree_icon.png'
       });
    }
-   poly.setOptions({ "visible": false });
+   poly.setOptions({ "visible": visible });
    poly.setMap(map);
    poly.polygon = polygon;
+   polygon.marker = poly;
    google.maps.event.addListener(poly, 'click', function() {
-      showInfo(this);
+      showInfo(this.polygon);
    });
    var li = document.createElement('li');
    var a = document.createElement('a');
    a.innerHTML = polygon.meta.name;
    a.onclick = function() {
-      showInfo(poly);
+      showInfo(polygon);
    }
    li.appendChild(a);
    poly.listItem = a;
    $('#items').append(li);
+   $('#in-mapItems').text($('#items li').length);
 }
 
 function addRect(polygon, map) {
@@ -191,9 +196,8 @@ function showPolygon(marker) {
     return marker.get("visible");
 }
 
-function showInfo(marker) {
-   var map = marker.map;
-   var polygon = marker.polygon;
+function showInfo(polygon) {
+   var marker = polygon.marker;
    if(polygon.center) {
        var center = new google.maps.LatLng(
           polygon.center[1], polygon.center[0]
@@ -214,33 +218,46 @@ function showInfo(marker) {
    output += "</p>"
    var div = document.createElement("div");
    div.align = "center";
-   var btn_center = document.createElement("a");
-   btn_center.className = "button";
-   btn_center.innerHTML = "Center on map";
-   btn_center.onclick = function() {
-      console.log(center);
-      map.setCenter(center);
-   }
-   var btn_show = document.createElement("a");
-   btn_show.className = "button toggle";
-   if(marker.get('visible') == true) {
-      btn_show.className += " on";
-   }
-   btn_show.innerHTML = "Show on map";
-   btn_show.onclick = function() {
-      var isActive = showPolygon(marker);
-      if(isActive) {
-         $(this).addClass('on');
-      } else {
-         $(this).removeClass('on');
+   if(marker) {
+      var btn_center = document.createElement("a");
+      btn_center.className = "button";
+      btn_center.innerHTML = "Center on map";
+      btn_center.onclick = function() {
+         map.setCenter(center);
       }
+      var btn_show = document.createElement("a");
+      btn_show.className = "button toggle";
+      if(marker.get('visible') == true) {
+         btn_show.className += " on";
+      }
+      btn_show.innerHTML = "Show on map";
+      btn_show.polygon = polygon;
+      btn_show.onclick = function() {
+         var isActive = showPolygon(this.polygon.marker);
+         if(isActive) {
+            $(this).addClass('on');
+         } else {
+            $(this).removeClass('on');
+         }
+      }
+      div.appendChild(btn_show);
+      div.innerHTML += " ";
+      div.appendChild(btn_center);
+   } else {
+      var btn_show = document.createElement("a");
+      btn_show.className = "button toggle";
+      btn_show.innerHTML = "Show on map";
+      btn_show.polygon = polygon;
+      btn_show.onclick = function() {
+         addPolygon(this.polygon, true);
+         map.setCenter(center);
+         $(this).addClass('on');
+         openPage('#info');
+      };
+      div.appendChild(btn_show);
    }
    $('#info-internal').html(output);
-   div.appendChild(btn_center);
-   div.innerHTML += "&nbsp;";
-   div.appendChild(btn_show);
    $('#info-internal').append(div);
-   //$('#info').addClass('active');
    openPage('#info');
 }
 
@@ -393,6 +410,29 @@ function pickRadius(button) {
     $(button).parent().children('.button').removeClass('on');
     $(button).addClass('on');
     map.searchRadius = parseInt($(button).text());
+}
+
+function searchAroundMe() {
+    natureskin.api.find_near(
+        map.userLocation.lng(), map.userLocation.lat(),
+        function(data) {
+            $('#searchResults').html("");
+            var item;
+            for(item in data.results) {
+                var result = database.load_from_json(data.results[item]);
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                a.innerHTML = "<div class='title'>"+result.meta.name+"</div>";
+                a.innerHTML += result.meta.type;
+                a.result = result;
+                a.onclick = function() {
+                    showInfo(this.result);
+                }
+                li.appendChild(a);
+                $('#searchResults').append(li);
+            }
+        }, map.searchRadius);
+    $('#searchResults').html("");
 }
 
 $(document).ready(init);
