@@ -4,35 +4,19 @@ The classes in this file are models for the datastore.
 from google.appengine.ext import db
 
 
-class Layer(db.Model):
+class Layer(db.Expando):
     """Metadata for a layer."""
     name = db.StringProperty()
-    #description = db.TextProperty()
-    #author = db.StringProperty()
-    #organization = db.StringProperty()
-    #phone = db.PhoneNumberProperty()
-    #email = db.EmailProperty()
-    #website = db.LinkProperty()
-    #address = db.PostalAddressProperty()
     uploaded_by = db.UserProperty()
     uploaded_at = db.DateTimeProperty(auto_now_add=True)
 
 
-class Polygon(db.Model):
+class Polygon(db.Expando):
     """This model represents a single item of a layer - one polygon on
        the map."""
-    dataset = db.StringProperty()
-    bounds_nw = db.GeoPtProperty()
-    bounds_se = db.GeoPtProperty()
-    polygon = db.ListProperty(db.GeoPt)
-    layer = db.ReferenceProperty(reference_class=Layer)
+    center = db.GeoPtProperty()
+    point = db.GeoPtProperty()
     name = db.StringProperty()
-    description = db.TextProperty()
-    phone = db.PhoneNumberProperty()
-    email = db.EmailProperty()
-    website = db.LinkProperty()
-    address = db.PostalAddressProperty()
-    owner = db.UserProperty()
 
 
 class Post(db.Model):

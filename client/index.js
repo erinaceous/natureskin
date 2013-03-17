@@ -9,6 +9,7 @@ var script;
 scripts = [
     "phonegap.js",
     "cordova.js",
+    "lib/json2.js",
     "lib/jquery-1.9.1.js",
 //    "lib/jquery.mobile-1.3.0/jquery.mobile-1.3.0.js",
 //    "lib/jquery.mobile.simpledialog2.js",
@@ -16,15 +17,11 @@ scripts = [
     "res/utils.js",
     "res/database.js",
     "res/normalize.js",
+    "//ns.odj.me/api.js",
     "res/simple_map_style.js",
-    "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s",
+    "//maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry&region=GB&sensor=true&key=AIzaSyCZpQAo0USwbOMZEX4Hb3OHISQktfzza2s",
     "res/app.js",
     "res/ui.js",
-    "data/areas_of_natural_beauty.json",
-    "data/country_parks.json",
-    "data/ancient_woodlands.json",
-    "data/walking_for_health.json",
-    "data/national_trails.json",
  ];
 
 for(script in scripts) {
