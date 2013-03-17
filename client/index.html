@@ -24,21 +24,44 @@
                 <li><a class="buttonlike" href="#settings">Map Settings</a></li>
                 <div id="settings" class="page submenu">
                     <p>Map type:<br />
-                        <a class="button toggle on">Satellite</a> <a class="button toggle">Street</a> <a class="button toggle">Terrain</a>
-                        <a class="button toggle full">Show labels</a>
+                        <a class="button toggle on" onClick="changeMap(this)">Satellite</a>
+                        <a class="button toggle" onClick="changeMap(this)">Hybrid</a>
+                        <a class="button toggle" onClick="changeMap(this)">Street</a>
+                        <a class="button toggle" onClick="changeMap(this)">Terrain</a>
+                    </p>
+                    <p>Labels:<br />
+                        <a class="button toggle on" onClick="showLabels(this)">Show</a>
+                        <a class="button toggle" onClick="showLabels(this)">Hide</a>
+                    </p>
+                    <p>Zoom:<br />
+                        <a class="button" onClick="zoomMap(this)">-</a>
+                        <a class="button" onClick="zoomMap(this)">8</a>
+                        <a class="button" onClick="zoomMap(this)">12</a>
+                        <a class="button" onClick="zoomMap(this)">16</a>
+                        <a class="button" onClick="zoomMap(this)">20</a>
+                        <a class="button" onClick="zoomMap(this)">+</a>
                     </p>
                     <p>Geolocation:<br />
-                        <a class="button toggle full">Track my location</a>
-                        <a class="button toggle full">Keep my location centred</a>
+                        <a class="button full" onclick="centerOnUser()">Center on me now</a>
+                        <a class="button toggle full" onClick="followUser(this)" data-option="track">Track my location</a>
+                        <a class="button toggle full" onClick="followUser(this)" data-option="center">Keep my location centered</a>
+                    </p>
+                    <p>Update location every:<br />
+                        <a class="button toggle" onClick="locationUpdateFreq(this)">1s</a>
+                        <a class="button toggle" onClick="locationUpdateFreq(this)">5s</a>
+                        <a class="button toggle on" onClick="locationUpdateFreq(this)">15s</a>
+                        <a class="button toggle" onClick="locationUpdateFreq(this)">30s</a>
+                        <a class="button toggle" onClick="locationUpdateFreq(this)">1m</a>
                     </p>
                 </div>
                 <li><a class="buttonlike" href="#items"><span class="indicator" id="in-mapItems">0</span> Items</a></li>
+                <ul id="items" class="page submenu">
+                </ul>
                 <li><a class="buttonlike" href="#about">About This</a></li>
             </ul>
         </div>
         <div id="info" class="page fullscreen dialog">
             <a href="#info" class="button right pad-top icon">x</a>
-            <h1>Area Information</h1>
             <div id="info-internal"></div>
         </div>
         <div id="search" class="page fullscreen">
@@ -46,11 +69,18 @@
             <h1>Search</h1>
         </div>
         <div id="whatsaround" class="page fullscreen">
+            <a href="#whatsaround" class="button right pad-top icon">x</a>
             <h1>What's Around</h1>
         </div>
         <div id="about" class="page fullscreen">
+            <a href="#about" class="button right pad-top icon">x</a>
             <h1>About natureskin</h1>
-            <p>TODO: Write this.</p>
+            <p>natureskin is developed by <a href="http://slashingedge.co.uk" target="_new">Owain Jones</a>.</p>
+            <p>Thanks to Natural England for their GIS data, provided under the Open Government License</p>
+            <p>Thanks to Google for the Maps API, AppEngine and the `Droid Sans` typeface</p>
+            <p>Thanks to the authors of jQuery and normalize.css for making my life 200x easier</p>
+            <p>Thanks to the authors of the `gpolyencode` and `shapefile` libraries for Python</p>
+            <p>Yes, I will turn this into a proper "about" page soon with helpful links and an appropriate software license for this project :)</p>
         </div>
         <div id="map-colors"></div>
         <script type="text/javascript" src="index.js"></script>

@@ -36,6 +36,9 @@ database = {
 
     /* Add a single area into memory. */
     load_area: function(key, data, onLoad) {
+        if(data.encoded) {
+            delete data.points;
+        }
         if(this.layers[key]) {
             this.layers[key].areas.push(data);
         } else {

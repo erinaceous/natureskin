@@ -4,9 +4,9 @@
  */
 
 @import url(lib/normalize.css);
-@import url(lib/jquery.mobile-1.3.0/naturey.css);
+/*@import url(lib/jquery.mobile-1.3.0/naturey.css);
 @import url(lib/jquery.mobile-1.3.0/jquery.mobile.structure-1.3.0.css);
-@import url(lib/jquery.mobile.simpledialog.css);
+@import url(lib/jquery.mobile.simpledialog.css);*/
 @import url(lib/fonts.css);
 @import url(res/map-colors.css);
 @import url(res/style.css);

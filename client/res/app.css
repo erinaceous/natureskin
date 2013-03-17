@@ -30,8 +30,13 @@ html, body {
     background-clip: content-box;
 }
 
-.page h1, .page h2, .page h3, .page ul, .page ol, .page p {
+.page h1, .page h2, .page ul, .page ol, .page p {
     padding: 1em;
+}
+
+.page h3 {
+    padding: 0px 1em;
+    margin: 1em 0px -.5em 0px;
 }
 
 .page h1 {
@@ -39,6 +44,10 @@ html, body {
     background-color: inherit;
     margin: 0;
     padding: .35em .25em;
+}
+
+.sub {
+    margin-top: -2em;
 }
 
 .fixed {
@@ -162,6 +171,7 @@ html, body {
 
 .button.full {
     display: block;
+    text-align: center;
 }
 
 .button.toggle {
@@ -170,12 +180,17 @@ html, body {
    border-color: #bbb;
 }
 
+.mono {
+    font-family: inconsolata;
+}
+
 .icon {
     overflow: hidden;
     background-position: left center;
     background-repeat: none;
     //font-family: flat-ui;
-    font-family: monospace;
+    font-family: inconsolata;
+    font-weight: bold;
     font-size: 16pt;
 }
 
@@ -205,7 +220,7 @@ html, body {
    display: block;
 }
 
-.sidebar ul li a:hover {
+.sidebar ul li a:hover, .sidebar ul li a.on, ul li a.on {
     border-color: #79c;
     background-color: #ace;
 }
@@ -235,6 +250,14 @@ html, body {
    -moz-border-radius: 1em;
    -ms-border-radius: 1em;
    -o-border-radius: 1em;
+}
+
+.inline {
+    display: inline !important;
+}
+
+.dialog.active {
+    display: inline-block;
 }
 
 .sidebar ul li a:active {

@@ -18,3 +18,13 @@
   font-family: flat-ui-big;
   src: url('./flat-ui/fonts/Flat-UI-Icons-24.svg') format('svg');
 }
+@font-face {
+  font-family: inconsolata;
+  font-weight: 400;
+  src: local('Inconsolata'), url('./inconsolata.woff') format('woff');
+}
+@font-face {
+  font-family: inconsolata;
+  font-weight: 700;
+  src: local('Inconsolata Bold'), url('./inconsolata-bold.woff') format('woff');
+}

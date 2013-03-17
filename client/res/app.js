@@ -128,6 +128,7 @@ function addArea(polygon, map) {
 }
 
 function addPolygon(polygon, map) {
+   var poly;
    if(polygon.points || polygon.encoded) {
       data = parsePolygon(polygon);
       polygon.meta.area = data.area;
@@ -146,13 +147,25 @@ function addPolygon(polygon, map) {
          'optimized': true,
          'position': new google.maps.LatLng(polygon.point[1], polygon.point[0]),
          'raiseOnDrag': false,
-         'title': polygon.meta.name
+         'title': polygon.meta.name,
+         'icon': 'res/tree_icon.png'
       });
    }
+   poly.setOptions({ "visible": false });
    poly.setMap(map);
+   poly.polygon = polygon;
    google.maps.event.addListener(poly, 'click', function() {
-      showInfo(map, polygon, poly);
+      showInfo(this);
    });
+   var li = document.createElement('li');
+   var a = document.createElement('a');
+   a.innerHTML = polygon.meta.name;
+   a.onclick = function() {
+      showInfo(poly);
+   }
+   li.appendChild(a);
+   poly.listItem = a;
+   $('#items').append(li);
 }
 
 function addRect(polygon, map) {
@@ -168,13 +181,67 @@ function addRect(polygon, map) {
    }
 }
 
-function showInfo(map, polygon, marker) {
-   output = ""
+function showPolygon(marker) {
+    marker.setOptions({ "visible": !marker.get("visible") });
+    if(marker.get("visible")) {
+        $(marker.listItem).addClass('on');
+    } else {
+        $(marker.listItem).removeClass('on');
+    }
+    return marker.get("visible");
+}
+
+function showInfo(marker) {
+   var map = marker.map;
+   var polygon = marker.polygon;
+   if(polygon.center) {
+       var center = new google.maps.LatLng(
+          polygon.center[1], polygon.center[0]
+       );
+   } else {
+       var center = new google.maps.LatLng(
+           polygon.bounds[1], polygon.bounds[0]
+       );
+   }
+   output = "<h1>"+polygon.meta.name+"</h1>"
+   output += "<p class='sub' align='center'><b>"+polygon.meta.type+"</b></p>"
+
+   output += "<h3>Raw meta-data</h3>"
+   output += "<p class='mono'>"
    for(var item in polygon.meta) {
-      output += "<p><b>"+item+"</b>: "+polygon.meta[item]+"</p>\n";
+      output += "<b>"+item+"</b>: "+polygon.meta[item]+"<br />\n";
+   }
+   output += "</p>"
+   var div = document.createElement("div");
+   div.align = "center";
+   var btn_center = document.createElement("a");
+   btn_center.className = "button";
+   btn_center.innerHTML = "Center on map";
+   btn_center.onclick = function() {
+      console.log(center);
+      map.setCenter(center);
+   }
+   var btn_show = document.createElement("a");
+   btn_show.className = "button toggle";
+   if(marker.get('visible') == true) {
+      btn_show.className += " on";
+   }
+   btn_show.innerHTML = "Show on map";
+   btn_show.onclick = function() {
+      var isActive = showPolygon(marker);
+      if(isActive) {
+         $(this).addClass('on');
+      } else {
+         $(this).removeClass('on');
+      }
    }
    $('#info-internal').html(output);
-   $('#info').addClass('active');
+   div.appendChild(btn_center);
+   div.innerHTML += "&nbsp;";
+   div.appendChild(btn_show);
+   $('#info-internal').append(div);
+   //$('#info').addClass('active');
+   openPage('#info');
 }
 
 function init() {
@@ -184,34 +251,142 @@ function init() {
    var canvas = document.getElementById('map_canvas');
    map = new google.maps.Map(canvas,{
       'center': new google.maps.LatLng(52.5, -2), // middle of UK
-      'zoom': 6,
+      'zoom': 10,
       'mapTypeId': google.maps.MapTypeId.SATELLITE,
       'disableDefaultUI': true
    });
-   get_user_location(map);
+   map.trackUser = false;
+   map.centerOnUser = false;
+   map.locationUpdateFreq = 15000;
+   map.locationUpdateLoop = null;
+   map.userMarker = null;
+   get_user_location(centerOnUser);
    init_polygons(map);
 }
 
 function init_polygons(map) {
+   var x=0;
    for(var polygons in database.layers) {
       polygons = database.layers[polygons].areas
       for(var i=0; i<polygons.length; i++) {
          addPolygon(polygons[i], map);
+         x+=1;
       }
    }
+   $("#in-mapItems").text(x);
 }
 
-function get_user_location(map) {
+function get_user_location(callback) {
    try{
       if(navigator.geolocation) {
-         navigator.geoLocation.getCurrentPosition(function(position) {
+         navigator.geolocation.getCurrentPosition(function(position) {
             initialLocation = new google.maps.LatLng(
                position.coords.latitude, position.coords.longitude
             );
-            map.setCenter(initialLocation);
+            map.userLocation = initialLocation;
+            if(callback) {
+                callback();
+            }
          });
       }
    } catch(e) {}
+}
+
+function locationUpdateLoop() {
+    get_user_location();
+    if(map.centerOnUser == true || map.trackUser == true) {
+        map.locationUpdateLoop = locationUpdateLoop;
+        setTimeout(map.locationUpdateLoop, map.locationUpdateFreq);
+    } else {
+        map.locationUpdateLoop = null;
+    }
+    if(map.trackUser == true) {
+        if(map.userMarker == null) {
+            map.userMarker = new google.maps.Marker({
+                "clickable": false,
+                "map": map,
+                "position": map.userLocation,
+                "title": "Your location",
+                "zIndex": 1000
+            });
+        }
+        map.userMarker.setOptions({ "visible": true,
+                                    "position": map.userLocation });
+    } else {
+        if(map.userMarker != null) {
+            map.userMarker.setOptions({ "visible": false });
+        }
+    }
+    if(map.centerOnUser == true) {
+        map.setOptions({ "draggable": false });
+        centerOnUser();
+    } else {
+        map.setOptions({ "draggable": true });
+    }
+}
+
+function centerOnUser() {
+    map.setCenter(map.userLocation);
+}
+
+function locationUpdateFreq(button) {
+    freq = parseInt($(button).text()) * 1000;
+    map.locationUpdateFreq = freq;
+    locationUpdateLoop();
+    $(button).parent().children('.button').removeClass('on');
+    $(button).addClass('on');
+}
+
+function followUser(button) {
+    isActive = $(button).hasClass('on');
+    switch($(button).data('option')) {
+        case "track":
+            map.trackUser = !isActive;
+            break;
+        case "center":
+            map.centerOnUser = !isActive;
+            break;
+    }
+    locationUpdateLoop();
+    $(button).toggleClass('on');
+}
+
+function changeMap(button) {
+    var types = {
+        "Satellite": google.maps.MapTypeId.SATELLITE,
+        "Hybrid": google.maps.MapTypeId.HYBRID,
+        "Street": google.maps.MapTypeId.ROADMAP,
+        "Terrain": google.maps.MapTypeId.TERRAIN
+    };
+
+    type = $(button).text();
+    map.setOptions({ "mapTypeId": types[type] });
+
+    $(button).parent().children('.button').removeClass('on');
+    $(button).addClass('on');
+}
+
+function showLabels(button) {
+    type = $(button).text();
+    if(type == "Hide") {
+        map.setOptions({ "styles": simple_map_style });
+    } else {
+        map.setOptions({ "styles": [] });
+    }
+    $(button).parent().children('.button').removeClass('on');
+    $(button).addClass('on');
+}
+
+function zoomMap(button) {
+    var zoom = $(button).text();
+    switch(zoom) {
+        case "-":
+            map.setZoom(map.getZoom() - 1); break;
+        case "+":
+            map.setZoom(map.getZoom() + 1); break;
+        default:
+            map.setZoom(parseInt(zoom));
+    }
 }
 
 $(document).ready(init);
