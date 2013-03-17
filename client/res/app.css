@@ -194,19 +194,28 @@ html, body {
     font-size: 16pt;
 }
 
-.sidebar ul {
+.sidebar ul, ul.big {
     list-style-type: none;
     margin: 0px -.25em;
     padding: 0;
     border-bottom: 1px solid #9c7;
 }
 
-.sidebar ul li a, .sidebar ul .submenu {
+ul.big {
+    margin: 0px 1em;
+    border-right: 1px solid #9c7;
+}
+
+.sidebar ul li a, .sidebar ul .submenu, ul.big li a {
     display: block;
     padding: 1em;
     border-top: 1px solid #9c7;
     border-left: 1em solid #9c7;
     color: black;
+}
+
+.title {
+    font-size: 200% !important;
 }
 
 .sidebar ul .submenu {
@@ -220,7 +229,7 @@ html, body {
    display: block;
 }
 
-.sidebar ul li a:hover, .sidebar ul li a.on, ul li a.on {
+.sidebar ul li a:hover, .sidebar ul li a.on, ul li a.on, ul.big li a:hover {
     border-color: #79c;
     background-color: #ace;
 }

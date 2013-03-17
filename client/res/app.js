@@ -389,4 +389,10 @@ function zoomMap(button) {
     }
 }
 
+function pickRadius(button) {
+    $(button).parent().children('.button').removeClass('on');
+    $(button).addClass('on');
+    map.searchRadius = parseInt($(button).text());
+}
+
 $(document).ready(init);
