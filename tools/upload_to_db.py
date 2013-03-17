@@ -12,6 +12,7 @@ import sys
 import json
 import pymongo
 import argparse
+import normalize_metadata
 
 
 def parse_file(path):
@@ -74,6 +75,11 @@ def main():
         del data[key]['meta']
         if 'encoded' in data[key].keys() and data[key]['encoded'] != []:
             del data[key]['points']
+        if 'lo_res' in data[key].keys() and data[key]['lo_res'] == []:
+            del data[key]['lo_res']
+        if 'center' not in data[key].keys():
+            data[key]['center'] =\
+                normalize_metadata.get_center(data[key]['bounds'])
         _id = collection.insert(data[key])
         print "Uploaded", data[key]['name'], "- ID:", _id
 
