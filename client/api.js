@@ -4,7 +4,7 @@ var natureskin = {
             string = escape(JSON.stringify(query));
             $.ajax({
                 dataType: "json",
-                url: "//ns.odj.me/api/_find?criteria="+string,
+                url: "//ns.odj.me/api/areas/_find?criteria="+string,
                 success: callback
             });
         }
